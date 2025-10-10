@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tacticus Character List</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>Tacticus Character Database</h1>
+            <p class="subtitle">Browse and sort characters by various attributes</p>
+        </header>
+
+        <div class="table-container">
+            <table id="charactersTable">
+                <thead>
+                    <tr>
+                        <th>Portrait</th>
+                        <th class="sortable" data-column="name">
+                            Name <span class="sort-indicator"></span>
+                        </th>
+                        <th class="sortable" data-column="faction">
+                            Faction <span class="sort-indicator"></span>
+                        </th>
+                        <th>Damage Types</th>
+                        <th>Traits</th>
+                        <th>Stats</th>
+                        <th class="sortable" data-column="grand_alliance">
+                            Alliance <span class="sort-indicator"></span>
+                        </th>
+                    </tr>
+                </thead>
+                <tbody id="tableBody">
+                    <!-- Data will be populated by JavaScript -->
+                </tbody>
+            </table>
+        </div>
+
+        <div id="loading" class="loading">Loading character data...</div>
+        <div id="error" class="error" style="display: none;">Error loading data. Please check the console.</div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
