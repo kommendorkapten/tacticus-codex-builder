@@ -17,6 +17,20 @@
             <p class="subtitle">Build your ultimate squad and explore team compositions</p>
         </header>
 
+        <div class="selected-squad">
+            <h2>Selected Squad <span id="squadCount">(0/5)</span></h2>
+            <div id="selectedCharacters" class="selected-characters-grid">
+                <p class="empty-squad-message">Select up to 5 characters to build your squad</p>
+            </div>
+            <button id="clearSquad" class="clear-button" style="display: none;">Clear Squad</button>
+        </div>
+
+        <div class="synergy-graph" id="synergyGraphSection" style="display: none;">
+            <h2>Squad Synergies</h2>
+            <p class="synergy-subtitle">Arrows show buff relationships • Solid = faction/alliance buffs • Dashed = trait-based buffs • Thick gold = universal buffs</p>
+            <div id="synergyGraph" class="graph-container"></div>
+        </div>
+
         <div class="filters-section">
             <div class="filter-container">
                 <div class="filter-group">
@@ -38,20 +52,6 @@
                 <button id="clearFilters" class="clear-button">Clear Filters</button>
             </div>
             <div id="filterInfo" class="filter-info"></div>
-        </div>
-
-        <div class="selected-squad">
-            <h2>Selected Squad <span id="squadCount">(0/5)</span></h2>
-            <div id="selectedCharacters" class="selected-characters-grid">
-                <p class="empty-squad-message">Select up to 5 characters to build your squad</p>
-            </div>
-            <button id="clearSquad" class="clear-button" style="display: none;">Clear Squad</button>
-        </div>
-
-        <div class="synergy-graph" id="synergyGraphSection" style="display: none;">
-            <h2>Squad Synergies</h2>
-            <p class="synergy-subtitle">Arrows show buff relationships • Solid = faction/alliance buffs • Dashed = trait-based buffs • Thick gold = universal buffs</p>
-            <div id="synergyGraph" class="graph-container"></div>
         </div>
 
         <div class="table-container">
