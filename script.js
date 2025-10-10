@@ -438,12 +438,20 @@ function renderSynergyGraph() {
                     const edgeWidth = isUniversal ? 4 : 2;
                     const isTraitBuff = affectsTraits.length > 0;
                     
+                    // Build label with omit information
+                    let label = buff.name;
+                    if (buff.omit === 'non-normal') {
+                        label += '\n(normal attacks)';
+                    } else if (buff.omit === 'normal') {
+                        label += '\n(non-normal attacks)';
+                    }
+                    
                     elements.push({
                         data: {
                             id: `edge-${sourceIndex}-${targetIndex}-${buff.name}`,
                             source: `node-${sourceIndex}`,
                             target: `node-${targetIndex}`,
-                            label: buff.name,
+                            label: label,
                             isUniversal: isUniversal,
                             isTraitBuff: isTraitBuff
                         },
@@ -489,12 +497,14 @@ function renderSynergyGraph() {
                     'arrow-scale': 1.5,
                     'opacity': 0.8,
                     'label': 'data(label)',
-                    'font-size': 10,
+                    'font-size': 9,
                     'color': '#ffffff',
                     'text-background-color': '#000000',
-                    'text-background-opacity': 0.8,
-                    'text-background-padding': 3,
-                    'text-rotation': 'autorotate'
+                    'text-background-opacity': 0.9,
+                    'text-background-padding': 4,
+                    'text-rotation': 'autorotate',
+                    'text-wrap': 'wrap',
+                    'text-max-width': 120
                 }
             },
             {

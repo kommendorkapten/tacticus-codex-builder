@@ -162,9 +162,9 @@ header h1 {
 .clear-button {
     margin-top: 20px;
     padding: 10px 20px;
-    background: linear-gradient(135deg, #8b0000, #dc143c);
-    color: #fff;
-    border: 1px solid #ff4444;
+    background: linear-gradient(135deg, #1a1a2e, #2d2d44);
+    color: #8a9ff5;
+    border: 2px solid #667eea;
     border-radius: 5px;
     cursor: pointer;
     font-family: 'Cinzel', serif;
@@ -173,9 +173,11 @@ header h1 {
 }
 
 .clear-button:hover {
-    background: linear-gradient(135deg, #dc143c, #ff4444);
+    background: linear-gradient(135deg, #2d2d44, #3d3d5a);
+    color: #a8b9ff;
+    border-color: #8a9ff5;
     transform: translateY(-2px);
-    box-shadow: 0 4px 8px rgba(220, 20, 60, 0.4);
+    box-shadow: 0 4px 8px rgba(102, 126, 234, 0.4);
 }
 
 /* Synergy Graph */
