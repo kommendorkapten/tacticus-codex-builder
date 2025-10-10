@@ -5,6 +5,7 @@ let sortColumn = null;
 let sortDirection = 'asc';
 let selectedTrait = '';
 let selectedDamageType = '';
+let searchQuery = '';
 let selectedCharacters = [];
 const MAX_SQUAD_SIZE = 5;
 
@@ -201,6 +202,7 @@ function populateDamageTypeFilter() {
 function setupFilterHandlers() {
     const traitFilter = document.getElementById('traitFilter');
     const damageTypeFilter = document.getElementById('damageTypeFilter');
+    const searchBox = document.getElementById('searchBox');
     const clearButton = document.getElementById('clearFilters');
     
     traitFilter.addEventListener('change', function() {
@@ -213,17 +215,39 @@ function setupFilterHandlers() {
         applyFilters();
     });
     
+    searchBox.addEventListener('input', function() {
+        searchQuery = this.value.toLowerCase();
+        applyFilters();
+    });
+    
     clearButton.addEventListener('click', function() {
         traitFilter.value = '';
         damageTypeFilter.value = '';
+        searchBox.value = '';
         selectedTrait = '';
         selectedDamageType = '';
+        searchQuery = '';
         applyFilters();
     });
 }
 
 function applyFilters() {
     filteredData = charactersData.filter(character => {
+        // Filter by search query (name, faction, or alliance - starts with)
+        if (searchQuery) {
+            const name = (character.name || '').toLowerCase();
+            const faction = (character.faction || '').toLowerCase();
+            const alliance = (character.grand_alliance || '').toLowerCase();
+            
+            const matchesSearch = name.startsWith(searchQuery) || 
+                                  faction.startsWith(searchQuery) || 
+                                  alliance.startsWith(searchQuery);
+            
+            if (!matchesSearch) {
+                return false;
+            }
+        }
+        
         // Filter by trait
         if (selectedTrait) {
             if (!character.traits || !character.traits.includes(selectedTrait)) {
@@ -250,6 +274,10 @@ function applyFilters() {
 function updateFilterInfo() {
     const filterInfo = document.getElementById('filterInfo');
     const filters = [];
+    
+    if (searchQuery) {
+        filters.push(`search "${searchQuery}"`);
+    }
     
     if (selectedTrait) {
         filters.push(`trait "${selectedTrait}"`);

@@ -105,6 +105,35 @@ header h1 {
     font-size: 1em;
 }
 
+.search-input {
+    padding: 10px 15px;
+    border: 2px solid rgba(102, 126, 234, 0.5);
+    border-radius: 8px;
+    background: #0f0f18;
+    color: #e0e0e0;
+    font-size: 1em;
+    transition: all 0.3s;
+    min-width: 300px;
+    width: 100%;
+}
+
+.search-input::placeholder {
+    color: #666;
+    font-style: italic;
+}
+
+.search-input:hover {
+    border-color: #667eea;
+    box-shadow: 0 2px 8px rgba(102, 126, 234, 0.4);
+    background: #1a1a24;
+}
+
+.search-input:focus {
+    outline: none;
+    border-color: #764ba2;
+    box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+}
+
 .filter-select {
     padding: 10px 15px;
     border: 2px solid rgba(102, 126, 234, 0.5);
