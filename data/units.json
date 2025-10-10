@@ -628,8 +628,22 @@
         },
         "effect": {
           "damage": {
-            "42": "238"
-          }
+              "8": "12",
+              "17": "28",
+              "26": "67",
+              "35": "142",
+              "42": "238",
+              "50": "499",
+              "55": "596"
+          },
+            "damage_bonus": {
+              "8": "51",
+              "17": "121",
+              "26": "249",
+              "35": "517",
+              "50": "1786",
+              "55": "2156"
+            }
         },
         "comment": "Deals 47 extra damage for each attack Abaddon has made"
       }
@@ -993,13 +1007,18 @@
           ]
         },
         "effect": {
-          "melee": {
+          "damage": {
             "8": "22",
             "17": "49",
             "26": "122",
             "35": "256",
-            "50": "898"
-          }
+            "50": "898",
+            "55": "1072"
+          },
+            "hits": {
+                "0-100": "1"
+            },
+            "restriction": "melee"
         },
         "comment": "Affected units at or below 50% health score +1 hits with melee attacks"
       }
@@ -1253,6 +1272,30 @@
         "type": "Block Booster"
       }
     ],
+      "buffs": [
+          {
+              "name": "Legendary Commander",
+              "affects": {
+                  "grand_alliance": ["*"]
+              },
+              "effect": {
+                  "damage": {
+                      "1": "11",
+ 	              "8": "27",
+                      "17": "60",
+                      "26": "148",
+                      "35": "314",
+                      "50": "1096",
+	              "55": "1310"
+                  },
+                  "hits": {
+                      "0-34": "1",
+                      "34-100": "2"
+                  }
+              },
+              "comment": "Score +1(2 at lvl 35+) hits with their first non-normal attack"
+          }
+      ],
     "grand_alliance": "Imperial",
     "row_number": 34
   },
