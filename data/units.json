@@ -594,7 +594,8 @@
     ],
     "traits": [
       "Resilient",
-      "Terminator Armour"
+      "Terminator Armour",
+      "Let The Galaxy Burn"
     ],
     "stats": {
       "movement": 3,
@@ -645,7 +646,8 @@
     ],
     "traits": [
       "Flying",
-      "Terrifying"
+      "Terrifying",
+      "Let The Galaxy Burn"
     ],
     "stats": {
       "movement": 4,
@@ -680,7 +682,8 @@
     "traits": [
       "Big Target",
       "Daemon",
-      "Suppressive Fire"
+      "Suppressive Fire",
+      "Let The Galaxy Burn"
     ],
     "stats": {
       "movement": 2,
@@ -714,7 +717,8 @@
       "Psychic"
     ],
     "traits": [
-      "Psyker"
+      "Psyker",
+      "Let The Galaxy Burn"
     ],
     "stats": {
       "movement": 3,
@@ -749,7 +753,8 @@
     ],
     "traits": [
       "Deep Strike",
-      "Terminator Armour"
+      "Terminator Armour",
+      "Let The Galaxy Burn"
     ],
     "stats": {
       "movement": 2,
