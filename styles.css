@@ -6,55 +6,195 @@
 
 body {
     font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
-    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    background: #0a0a0f;
     min-height: 100vh;
     padding: 20px;
+    position: relative;
+    overflow-x: hidden;
+}
+
+/* Starfield background */
+body::before {
+    content: '';
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-image: 
+        radial-gradient(2px 2px at 20% 30%, white, transparent),
+        radial-gradient(2px 2px at 60% 70%, white, transparent),
+        radial-gradient(1px 1px at 50% 50%, white, transparent),
+        radial-gradient(1px 1px at 80% 10%, white, transparent),
+        radial-gradient(2px 2px at 90% 60%, white, transparent),
+        radial-gradient(1px 1px at 33% 80%, white, transparent),
+        radial-gradient(1px 1px at 15% 60%, white, transparent),
+        radial-gradient(2px 2px at 70% 35%, white, transparent);
+    background-size: 200% 200%;
+    background-position: 0% 0%, 40% 60%, 130% 270%, 70% 100%, 20% 180%, 90% 50%, 40% 30%, 60% 80%;
+    animation: stars 120s linear infinite;
+    pointer-events: none;
+    z-index: 0;
+    opacity: 0.6;
+}
+
+@keyframes stars {
+    0% {
+        background-position: 0% 0%, 40% 60%, 130% 270%, 70% 100%, 20% 180%, 90% 50%, 40% 30%, 60% 80%;
+    }
+    100% {
+        background-position: 200% 200%, 240% 260%, 330% 470%, 270% 300%, 220% 380%, 290% 250%, 240% 230%, 260% 280%;
+    }
 }
 
 .container {
     max-width: 1400px;
     margin: 0 auto;
-    background: white;
+    background: linear-gradient(135deg, #1a1a24 0%, #0f0f18 100%);
     border-radius: 10px;
-    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.8), 0 0 40px rgba(102, 126, 234, 0.2);
     overflow: hidden;
+    position: relative;
+    z-index: 1;
+    border: 1px solid rgba(102, 126, 234, 0.3);
 }
 
 header {
-    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-    color: white;
+    background: linear-gradient(135deg, #1e1e2e 0%, #12121a 100%);
+    color: #e0e0e0;
     padding: 30px;
     text-align: center;
+    border-bottom: 2px solid rgba(102, 126, 234, 0.5);
 }
 
 header h1 {
     font-size: 2.5em;
     margin-bottom: 10px;
-    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2);
+    text-shadow: 0 0 20px rgba(102, 126, 234, 0.8), 2px 2px 4px rgba(0, 0, 0, 0.8);
+    color: #ffffff;
 }
 
 .subtitle {
     font-size: 1.1em;
     opacity: 0.9;
+    color: #b0b0c0;
+}
+
+.filters-section {
+    background: linear-gradient(135deg, #1e1e2e 0%, #15151f 100%);
+    padding: 25px;
+    border-bottom: 2px solid rgba(102, 126, 234, 0.5);
+}
+
+.filters-section h2 {
+    color: #8b9aee;
+    font-size: 1.5em;
+    margin-bottom: 15px;
+    text-shadow: 0 0 10px rgba(102, 126, 234, 0.5);
+}
+
+.filter-container {
+    display: flex;
+    align-items: flex-end;
+    gap: 15px;
+    flex-wrap: wrap;
+}
+
+.filter-group {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.filter-container label {
+    font-weight: 600;
+    color: #b0b0c0;
+    font-size: 1em;
+}
+
+.filter-select {
+    padding: 10px 15px;
+    border: 2px solid rgba(102, 126, 234, 0.5);
+    border-radius: 8px;
+    background: #0f0f18;
+    color: #e0e0e0;
+    font-size: 1em;
+    cursor: pointer;
+    transition: all 0.3s;
+    min-width: 200px;
+}
+
+.filter-select:hover {
+    border-color: #667eea;
+    box-shadow: 0 2px 8px rgba(102, 126, 234, 0.4);
+    background: #1a1a24;
+}
+
+.filter-select:focus {
+    outline: none;
+    border-color: #764ba2;
+    box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+}
+
+.clear-button {
+    padding: 10px 20px;
+    background: linear-gradient(135deg, #ff6b6b 0%, #ee5a6f 100%);
+    color: white;
+    border: none;
+    border-radius: 8px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s;
+    font-size: 1em;
+}
+
+.clear-button:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(238, 90, 111, 0.4);
+}
+
+.clear-button:active {
+    transform: translateY(0);
+}
+
+.filter-info {
+    margin-top: 15px;
+    padding: 12px 20px;
+    background: #0f0f18;
+    border-left: 4px solid #667eea;
+    border-radius: 6px;
+    color: #e0e0e0;
+    font-size: 0.95em;
+    display: none;
+}
+
+.filter-info.active {
+    display: block;
+}
+
+.filter-info strong {
+    color: #8b9aee;
 }
 
 .table-container {
     overflow-x: auto;
     padding: 20px;
+    background: #0f0f18;
 }
 
 table {
     width: 100%;
     border-collapse: collapse;
-    background: white;
+    background: #1a1a24;
 }
 
 thead {
-    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-    color: white;
+    background: linear-gradient(135deg, #2a2a3e 0%, #1e1e2e 100%);
+    color: #e0e0e0;
     position: sticky;
     top: 0;
     z-index: 10;
+    border-bottom: 2px solid rgba(102, 126, 234, 0.5);
 }
 
 th {
@@ -93,8 +233,9 @@ th.sortable.desc .sort-indicator::after {
 
 td {
     padding: 12px 10px;
-    border-bottom: 1px solid #e0e0e0;
+    border-bottom: 1px solid rgba(102, 126, 234, 0.2);
     vertical-align: middle;
+    color: #e0e0e0;
 }
 
 tbody tr {
@@ -102,15 +243,15 @@ tbody tr {
 }
 
 tbody tr:hover {
-    background-color: #f5f5f5;
+    background-color: rgba(102, 126, 234, 0.1);
 }
 
 tbody tr:nth-child(even) {
-    background-color: #fafafa;
+    background-color: rgba(0, 0, 0, 0.2);
 }
 
 tbody tr:nth-child(even):hover {
-    background-color: #f0f0f0;
+    background-color: rgba(102, 126, 234, 0.15);
 }
 
 .portrait-cell {
@@ -122,18 +263,64 @@ tbody tr:nth-child(even):hover {
     height: 60px;
     border-radius: 8px;
     object-fit: cover;
-    border: 2px solid #667eea;
+    border: 3px solid #667eea;
     box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    transition: all 0.3s ease;
+}
+
+/* Imperial portrait frames */
+.portrait-imperial .portrait {
+    border: 3px solid #fbbf24;
+    box-shadow: 0 0 12px rgba(30, 58, 138, 0.6), 0 0 20px rgba(251, 191, 36, 0.3);
+}
+
+/* Chaos portrait frames */
+.portrait-chaos .portrait {
+    border: 3px solid #8b0000;
+    box-shadow: 0 0 15px rgba(139, 0, 0, 0.8), 0 0 25px rgba(255, 0, 0, 0.4);
+    animation: chaosGlow 2s ease-in-out infinite alternate;
+}
+
+@keyframes chaosGlow {
+    0% {
+        box-shadow: 0 0 15px rgba(139, 0, 0, 0.8), 0 0 25px rgba(255, 0, 0, 0.4);
+    }
+    100% {
+        box-shadow: 0 0 20px rgba(139, 0, 0, 1), 0 0 35px rgba(255, 0, 0, 0.6);
+    }
+}
+
+/* Xenos portrait frames */
+.portrait-xenos .portrait {
+    border: 3px solid #00ff88;
+    box-shadow: 0 0 12px rgba(138, 43, 226, 0.7), 0 0 20px rgba(0, 255, 136, 0.4);
+    animation: xenosGlow 3s ease-in-out infinite alternate;
+}
+
+@keyframes xenosGlow {
+    0% {
+        box-shadow: 0 0 12px rgba(138, 43, 226, 0.7), 0 0 20px rgba(0, 255, 136, 0.4);
+    }
+    100% {
+        box-shadow: 0 0 18px rgba(138, 43, 226, 0.9), 0 0 30px rgba(0, 255, 136, 0.6);
+    }
+}
+
+/* None/Undefined portrait frames */
+.portrait-none .portrait,
+.portrait-undefined .portrait {
+    border: 3px solid #2c3e50;
+    box-shadow: 0 2px 8px rgba(44, 62, 80, 0.4);
 }
 
 .name-cell {
     font-weight: 600;
-    color: #333;
+    color: #ffffff;
     font-size: 1.05em;
 }
 
 .faction-cell {
-    color: #667eea;
+    color: #8b9aee;
     font-weight: 500;
 }
 
@@ -158,7 +345,7 @@ tbody tr:nth-child(even):hover {
 }
 
 .trait-badge {
-    background: linear-gradient(135deg, #4ecdc4 0%, #44a08d 100%);
+    background: linear-gradient(135deg, #1e40af 0%, #0e7490 50%, #047857 100%);
     color: white;
 }
 
@@ -173,19 +360,20 @@ tbody tr:nth-child(even):hover {
     display: flex;
     align-items: center;
     padding: 4px 8px;
-    background: #f5f5f5;
+    background: rgba(0, 0, 0, 0.3);
     border-radius: 6px;
+    border: 1px solid rgba(102, 126, 234, 0.3);
 }
 
 .stat-label {
     font-weight: 600;
-    color: #666;
+    color: #8b9aee;
     margin-right: 5px;
     text-transform: capitalize;
 }
 
 .stat-value {
-    color: #333;
+    color: #e0e0e0;
     font-weight: 500;
 }
 
@@ -197,18 +385,33 @@ tbody tr:nth-child(even):hover {
 }
 
 .alliance-imperial {
-    background: linear-gradient(135deg, #ffd89b 0%, #19547b 100%);
-    color: white;
+    background: linear-gradient(135deg, #0a1f44 0%, #1e3a8a 50%, #0a1f44 100%);
+    color: #fbbf24;
+    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.5);
+    border: 2px solid #fbbf24;
+    box-shadow: 0 2px 8px rgba(30, 58, 138, 0.6), inset 0 1px 3px rgba(251, 191, 36, 0.3);
+    font-weight: 600;
+    letter-spacing: 0.5px;
 }
 
 .alliance-chaos {
-    background: linear-gradient(135deg, #8e2de2 0%, #4a00e0 100%);
-    color: white;
+    background: linear-gradient(135deg, #1a0000 0%, #8b0000 50%, #1a0000 100%);
+    color: #ffd700;
+    text-shadow: 0 0 10px rgba(139, 0, 0, 0.8), 0 0 20px rgba(255, 0, 0, 0.5);
+    border: 2px solid #8b0000;
+    box-shadow: 0 0 15px rgba(139, 0, 0, 0.6), inset 0 0 10px rgba(0, 0, 0, 0.8);
+    font-weight: 700;
+    letter-spacing: 1px;
 }
 
 .alliance-xenos {
-    background: linear-gradient(135deg, #56ab2f 0%, #a8e063 100%);
-    color: white;
+    background: linear-gradient(135deg, #0d001a 0%, #1a0033 25%, #4a148c 50%, #1a0033 75%, #0d001a 100%);
+    color: #00ff88;
+    text-shadow: 0 0 8px rgba(0, 255, 136, 0.8), 0 0 15px rgba(138, 43, 226, 0.5);
+    border: 2px solid #00ff88;
+    box-shadow: 0 0 12px rgba(138, 43, 226, 0.7), inset 0 0 8px rgba(0, 255, 136, 0.2);
+    font-weight: 600;
+    letter-spacing: 0.8px;
 }
 
 .alliance-none, .alliance-undefined {
@@ -223,14 +426,16 @@ tbody tr:nth-child(even):hover {
 }
 
 .loading {
-    color: #667eea;
+    color: #8b9aee;
+    text-shadow: 0 0 10px rgba(102, 126, 234, 0.5);
 }
 
 .error {
     color: #ff6b6b;
-    background: #ffe0e0;
+    background: rgba(139, 0, 0, 0.2);
     border-radius: 8px;
     margin: 20px;
+    border: 1px solid #8b0000;
 }
 
 /* Responsive Design */
@@ -251,6 +456,24 @@ tbody tr:nth-child(even):hover {
 
     .subtitle {
         font-size: 0.95em;
+    }
+
+    .filters-section {
+        padding: 15px;
+    }
+
+    .filter-container {
+        flex-direction: column;
+        align-items: stretch;
+        gap: 10px;
+    }
+
+    .filter-group {
+        width: 100%;
+    }
+
+    .filter-select {
+        width: 100%;
     }
 
     th, td {

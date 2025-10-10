@@ -3,15 +3,35 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Tacticus Character List</title>
+    <title>Tacticus Codex Builder</title>
     <link rel="stylesheet" href="styles.css">
 </head>
 <body>
     <div class="container">
         <header>
-            <h1>Tacticus Character Database</h1>
-            <p class="subtitle">Browse and sort characters by various attributes</p>
+            <h1>Tacticus Codex Builder</h1>
+            <p class="subtitle">Build your ultimate squad and explore team compositions</p>
         </header>
+
+        <div class="filters-section">
+            <h2>Filters</h2>
+            <div class="filter-container">
+                <div class="filter-group">
+                    <label for="traitFilter">Filter by Trait:</label>
+                    <select id="traitFilter" class="filter-select">
+                        <option value="">All Traits</option>
+                    </select>
+                </div>
+                <div class="filter-group">
+                    <label for="damageTypeFilter">Filter by Damage Type:</label>
+                    <select id="damageTypeFilter" class="filter-select">
+                        <option value="">All Damage Types</option>
+                    </select>
+                </div>
+                <button id="clearFilters" class="clear-button">Clear Filters</button>
+            </div>
+            <div id="filterInfo" class="filter-info"></div>
+        </div>
 
         <div class="table-container">
             <table id="charactersTable">
