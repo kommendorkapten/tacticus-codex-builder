@@ -521,7 +521,7 @@ function renderSynergyGraph() {
             animate: true,
             animationDuration: 500
         },
-        userZoomingEnabled: true,
+        userZoomingEnabled: false,
         userPanningEnabled: true,
         boxSelectionEnabled: false
     });
