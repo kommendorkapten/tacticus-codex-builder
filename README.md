@@ -92,6 +92,22 @@ This makes it straightforward to replace the static JSON file with API calls to 
 - Requires JavaScript enabled
 - Uses CSS Grid and Flexbox for layout
 
+## Cache Busting
+
+To ensure users get the latest version after deployments:
+
+1. **Version Query Parameters**: CSS and JS files include `?v=X.X.X` parameters
+2. **Update Version Numbers**: When deploying changes, increment the version in `index.html`:
+   ```html
+   <link rel="stylesheet" href="styles.css?v=1.0.1">
+   <script src="script.js?v=1.0.1"></script>
+   ```
+3. **Meta Tags**: Cache control meta tags force browsers to revalidate
+
+### Quick Version Update
+
+Before deploying, search for `?v=` in `index.html` and increment the version number (e.g., 1.0.0 → 1.0.1).
+
 ## License
 
 This project is part of the Tacticus Builder application.
