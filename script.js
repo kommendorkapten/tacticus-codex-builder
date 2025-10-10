@@ -7,6 +7,7 @@ let selectedTrait = '';
 let selectedDamageType = '';
 let searchQuery = '';
 let selectedCharacters = [];
+let characterBuffsData = []; // Store buffs affecting each character in the graph
 const MAX_SQUAD_SIZE = 5;
 
 // Load and initialize the table
@@ -365,6 +366,54 @@ function updateSelectedSquadDisplay() {
 }
 
 let cy = null; // Store Cytoscape instance
+const BUFF_LEVEL = 37; // Hardcoded level for buff calculations
+
+// Function to interpolate buff values at a specific level
+function interpolateBuffValue(damageMap, level) {
+    if (!damageMap || typeof damageMap !== 'object') return null;
+    
+    // Convert keys to numbers and sort
+    const levels = Object.keys(damageMap).map(Number).sort((a, b) => a - b);
+    
+    // Exact match
+    if (damageMap[level.toString()]) {
+        return parseInt(damageMap[level.toString()]);
+    }
+    
+    // Find surrounding levels for interpolation
+    let lowerLevel = null;
+    let upperLevel = null;
+    
+    for (let i = 0; i < levels.length; i++) {
+        if (levels[i] < level) {
+            lowerLevel = levels[i];
+        }
+        if (levels[i] > level && upperLevel === null) {
+            upperLevel = levels[i];
+            break;
+        }
+    }
+    
+    // If level is below all keys, return lowest value
+    if (lowerLevel === null && upperLevel !== null) {
+        return parseInt(damageMap[upperLevel.toString()]);
+    }
+    
+    // If level is above all keys, return highest value
+    if (upperLevel === null && lowerLevel !== null) {
+        return parseInt(damageMap[lowerLevel.toString()]);
+    }
+    
+    // Linear interpolation
+    if (lowerLevel !== null && upperLevel !== null) {
+        const lowerValue = parseInt(damageMap[lowerLevel.toString()]);
+        const upperValue = parseInt(damageMap[upperLevel.toString()]);
+        const ratio = (level - lowerLevel) / (upperLevel - lowerLevel);
+        return Math.round(lowerValue + (upperValue - lowerValue) * ratio);
+    }
+    
+    return null;
+}
 
 function renderSynergyGraph() {
     const container = document.getElementById('synergyGraph');
@@ -374,6 +423,9 @@ function renderSynergyGraph() {
     
     // Build nodes and edges for Cytoscape
     const elements = [];
+    
+    // Track buffs affecting each character
+    const characterBuffs = selectedCharacters.map(() => []);
     
     // Add nodes
     selectedCharacters.forEach((char, index) => {
@@ -386,7 +438,8 @@ function renderSynergyGraph() {
                 faction: char.faction,
                 alliance: char.grand_alliance,
                 portrait: char.portrait_url,
-                allianceColor: allianceColor
+                allianceColor: allianceColor,
+                characterIndex: index
             }
         });
     });
@@ -446,6 +499,14 @@ function renderSynergyGraph() {
                         label += '\n(non-normal attacks)';
                     }
                     
+                    // Store buff info for the affected character
+                    characterBuffs[targetIndex].push({
+                        buffName: buff.name,
+                        sourceName: sourceChar.name,
+                        effect: buff.effect,
+                        omit: buff.omit
+                    });
+                    
                     elements.push({
                         data: {
                             id: `edge-${sourceIndex}-${targetIndex}-${buff.name}`,
@@ -465,6 +526,9 @@ function renderSynergyGraph() {
             });
         });
     });
+    
+    // Store globally for overlay rendering
+    characterBuffsData = characterBuffs;
     
     // Initialize Cytoscape
     if (cy) {
@@ -578,15 +642,19 @@ function updateNodeImageOverlays() {
         const width = node.renderedWidth();
         const height = node.renderedHeight();
         const data = node.data();
+        const charIndex = data.characterIndex;
+        
+        // Create wrapper for image and buff table
+        const wrapper = document.createElement('div');
+        wrapper.style.position = 'absolute';
+        wrapper.style.left = `${position.x - width/2}px`;
+        wrapper.style.top = `${position.y - height/2}px`;
+        wrapper.style.pointerEvents = 'none';
         
         // Create image element
         const imgWrapper = document.createElement('div');
-        imgWrapper.style.position = 'absolute';
-        imgWrapper.style.left = `${position.x - width/2}px`;
-        imgWrapper.style.top = `${position.y - height/2}px`;
         imgWrapper.style.width = `${width}px`;
         imgWrapper.style.height = `${height}px`;
-        imgWrapper.style.pointerEvents = 'none';
         imgWrapper.style.borderRadius = '8px';
         imgWrapper.style.overflow = 'hidden';
         
@@ -598,7 +666,46 @@ function updateNodeImageOverlays() {
         img.style.display = 'block';
         
         imgWrapper.appendChild(img);
-        overlayContainer.appendChild(imgWrapper);
+        wrapper.appendChild(imgWrapper);
+        
+        // Add buff table if this character receives buffs
+        if (charIndex !== undefined && characterBuffsData[charIndex] && characterBuffsData[charIndex].length > 0) {
+            const buffTable = document.createElement('div');
+            buffTable.style.marginTop = '8px';
+            buffTable.style.background = 'rgba(0, 0, 0, 0.9)';
+            buffTable.style.border = '1px solid #667eea';
+            buffTable.style.borderRadius = '4px';
+            buffTable.style.padding = '8px';
+            buffTable.style.fontSize = '11px';
+            buffTable.style.color = '#d4af37';
+            buffTable.style.minWidth = `${width}px`;
+            buffTable.style.whiteSpace = 'nowrap';
+            
+            let tableHTML = '<table style="width: 100%; border-collapse: collapse;">';
+            tableHTML += '<tr style="border-bottom: 1px solid #444;"><th style="text-align: left; padding: 5px; font-size: 13px;">Buff</th><th style="text-align: right; padding: 5px; font-size: 13px;">Dmg@37</th></tr>';
+            
+            characterBuffsData[charIndex].forEach(buffInfo => {
+                if (buffInfo.effect && buffInfo.effect.damage) {
+                    const damageValue = interpolateBuffValue(buffInfo.effect.damage, BUFF_LEVEL);
+                    if (damageValue !== null) {
+                        tableHTML += `<tr><td style="padding: 5px; font-size: 12px;">${buffInfo.buffName}</td><td style="text-align: right; padding: 5px; font-size: 13px; font-weight: bold; color: #ff6b6b;">${damageValue}</td></tr>`;
+                    }
+                }
+                // Check for damage_bonus
+                if (buffInfo.effect && buffInfo.effect.damage_bonus) {
+                    const bonusValue = interpolateBuffValue(buffInfo.effect.damage_bonus, BUFF_LEVEL);
+                    if (bonusValue !== null) {
+                        tableHTML += `<tr><td style="padding: 5px; font-size: 12px;">${buffInfo.buffName}+</td><td style="text-align: right; padding: 5px; font-size: 13px; font-weight: bold; color: #6bff6b;">${bonusValue}</td></tr>`;
+                    }
+                }
+            });
+            
+            tableHTML += '</table>';
+            buffTable.innerHTML = tableHTML;
+            wrapper.appendChild(buffTable);
+        }
+        
+        overlayContainer.appendChild(wrapper);
     });
 }
 
