@@ -3,8 +3,6 @@
     "id": "admecDestroyer",
     "name": "Sy-gex",
     "portrait_url": "https://tacticusplanner.app/assets/ui_image_RoundPortrait_admec_destroyer_01-Bi-QQOkp.png",
-    "rarity": "Uncommon",
-    "rank": "Locked",
     "faction": "AdeptusMechanicus",
     "damage_types": [
       "Flame",
@@ -42,8 +40,6 @@
   {
     "name": "Vitruvius",
     "portrait_url": "https://tacticusplanner.app/assets/ui_image_RoundPortrait_admec_dominus_01-fo-Ny0vQ.png",
-    "rarity": "Legendary",
-    "rank": "Locked",
     "faction": "AdeptusMechanicus",
     "damage_types": [
       "Power",
@@ -81,8 +77,6 @@
     "id": "admecManipulus",
     "name": "Actus",
     "portrait_url": "https://tacticusplanner.app/assets/ui_image_RoundPortrait_admec_manipulus_01-BzQunPi4.png",
-    "rarity": "Rare",
-    "rank": "Locked",
     "faction": "AdeptusMechanicus",
     "damage_types": [
       "Energy"
@@ -119,8 +113,6 @@
     "id": "admecMarshall",
     "name": "Tan Gi'da",
     "portrait_url": "https://tacticusplanner.app/assets/ui_image_RoundPortrait_admec_marshall_01-BuKlHPyc.png",
-    "rarity": "Rare",
-    "rank": "Locked",
     "faction": "AdeptusMechanicus",
     "damage_types": [
       "Physical",
@@ -156,8 +148,6 @@
     "id": "admecRuststalker",
     "name": "Exitor-Rho",
     "portrait_url": "https://tacticusplanner.app/assets/ui_image_RoundPortrait_admec_ruststalker_01-BE72xeon.png",
-    "rarity": "Uncommon",
-    "rank": "Locked",
     "faction": "AdeptusMechanicus",
     "damage_types": [
       "Energy",
@@ -194,8 +184,6 @@
     "id": "eldarAutarch",
     "name": "Aethana",
     "portrait_url": "https://tacticusplanner.app/assets/ui_image_RoundPortrait_aelda_autarch_01-DRa8LbEA.png",
-    "rarity": "Uncommon",
-    "rank": "Locked",
     "faction": "Aeldari",
     "damage_types": [
       "Piercing"
@@ -229,8 +217,6 @@
     "id": "eldarFarseer",
     "name": "Eldryon",
     "portrait_url": "https://tacticusplanner.app/assets/ui_image_RoundPortrait_aelda_farseer_01-BkLpdrwp.png",
-    "rarity": "Rare",
-    "rank": "Locked",
     "faction": "Aeldari",
     "damage_types": [
       "Piercing",
@@ -295,8 +281,6 @@
   {
     "name": "Jain Zar",
     "portrait_url": "https://tacticusplanner.app/assets/ui_image_RoundPortrait_aelda_jainzar_01-DSD3APXE.png",
-    "rarity": "Legendary",
-    "rank": "Locked",
     "faction": "Aeldari",
     "damage_types": [
       "Piercing"
@@ -329,8 +313,6 @@
     "id": "eldarMauganRa",
     "name": "Maugan Ra",
     "portrait_url": "https://tacticusplanner.app/assets/ui_image_RoundPortrait_aelda_maugan_01-J8N51CZ7.png",
-    "rarity": "Legendary",
-    "rank": "Locked",
     "faction": "Aeldari",
     "damage_types": [
       "Power",
@@ -368,8 +350,6 @@
     "id": "eldarRanger",
     "name": "Calandis",
     "portrait_url": "https://tacticusplanner.app/assets/ui_image_RoundPortrait_aelda_ranger_01-NYvqG1Sa.png",
-    "rarity": "Common",
-    "rank": "Locked",
     "faction": "Aeldari",
     "damage_types": [
       "Physical",
@@ -407,8 +387,6 @@
     "id": "astraBullgryn",
     "name": "Kut Skoden",
     "portrait_url": "https://tacticusplanner.app/assets/ui_image_RoundPortrait_astra_bullgryn_01-DlFbXjeg.png",
-    "rarity": "Uncommon",
-    "rank": "Locked",
     "faction": "AstraMilitarum",
     "damage_types": [
       "Physical",
@@ -441,8 +419,6 @@
   {
     "name": "Castellan Creed",
     "portrait_url": "https://tacticusplanner.app/assets/ui_image_RoundPortrait_astra_creed_01-CfBI-8S-.png",
-    "rarity": "Legendary",
-    "rank": "Locked",
     "faction": "AstraMilitarum",
     "damage_types": [
       "Las"
@@ -472,8 +448,6 @@
   {
     "name": "Marshal Dreir",
     "portrait_url": "https://tacticusplanner.app/assets/ui_image_RoundPortrait_astra_dreir_01-COLA_vXd.png",
-    "rarity": "Epic",
-    "rank": "Locked",
     "faction": "AstraMilitarum",
     "damage_types": [
       "Power"
@@ -507,8 +481,6 @@
     "id": "astraOrdnance",
     "name": "Thaddeus Noble",
     "portrait_url": "https://tacticusplanner.app/assets/ui_image_RoundPortrait_astra_ordnance_01-V4Yi0eP0.png",
-    "rarity": "Rare",
-    "rank": "Locked",
     "faction": "AstraMilitarum",
     "damage_types": [
       "Las",
@@ -545,8 +517,6 @@
     "id": "astraPrimarisPsy",
     "name": "Sibyll Devine",
     "portrait_url": "https://tacticusplanner.app/assets/ui_image_RoundPortrait_astra_psyker_01-BtfBnshN.png",
-    "rarity": "Common",
-    "rank": "Locked",
     "faction": "AstraMilitarum",
     "damage_types": [
       "Psychic"
@@ -581,8 +551,6 @@
     "id": "astraYarrick",
     "name": "Commissar Yarrick",
     "portrait_url": "https://tacticusplanner.app/assets/ui_image_RoundPortrait_astra_yarrick_01-CxdGNkRE.png",
-    "rarity": "Rare",
-    "rank": "Locked",
     "faction": "AstraMilitarum",
     "damage_types": [
       "Power",
@@ -618,8 +586,6 @@
     "id": "blackAbaddon",
     "name": "Abaddon the Despoiler",
     "portrait_url": "https://tacticusplanner.app/assets/ui_image_RoundPortrait_black_abaddon_01-C11OOY64.png",
-    "rarity": "Legendary",
-    "rank": "Locked",
     "faction": "BlackLegion",
     "damage_types": [
       "Power",
@@ -673,8 +639,6 @@
     "id": "blackHaarken",
     "name": "Haarken Worldclaimer",
     "portrait_url": "https://tacticusplanner.app/assets/ui_image_RoundPortrait_black_haarken_01-CIRUSS3F.png",
-    "rarity": "Epic",
-    "rank": "Locked",
     "faction": "BlackLegion",
     "damage_types": [
       "Piercing"
@@ -708,8 +672,6 @@
     "id": "blackObliterator",
     "name": "Volk",
     "portrait_url": "https://tacticusplanner.app/assets/ui_image_RoundPortrait_black_obliterator_01-BwBQBFmp.png",
-    "rarity": "Rare",
-    "rank": "Locked",
     "faction": "BlackLegion",
     "damage_types": [
       "Power",
@@ -747,8 +709,6 @@
     "id": "blackPossession",
     "name": "Archimatos",
     "portrait_url": "https://tacticusplanner.app/assets/ui_image_RoundPortrait_black_possession_01-CXUa9mHd.png",
-    "rarity": "Uncommon",
-    "rank": "Locked",
     "faction": "BlackLegion",
     "damage_types": [
       "Psychic"
@@ -783,8 +743,6 @@
     "id": "blackTerminator",
     "name": "Angrax",
     "portrait_url": "https://tacticusplanner.app/assets/ui_image_RoundPortrait_black_terminator_01-D6wLkhBG.png",
-    "rarity": "Common",
-    "rank": "Locked",
     "faction": "BlackLegion",
     "damage_types": [
       "Power"
@@ -818,8 +776,6 @@
     "id": "templAggressor",
     "name": "Brother Burchard",
     "portrait_url": "https://tacticusplanner.app/assets/ui_image_RoundPortrait_templ_aggressor_01-DdVQ0lE9.png",
-    "rarity": "Uncommon",
-    "rank": "Locked",
     "faction": "BlackTemplars",
     "damage_types": [
       "Power",
@@ -858,8 +814,6 @@
     "id": "templAncient",
     "name": "Ancient Thoread",
     "portrait_url": "https://tacticusplanner.app/assets/ui_image_RoundPortrait_templ_ancient_01-CdHOV3eC.png",
-    "rarity": "Rare",
-    "rank": "Locked",
     "faction": "BlackTemplars",
     "damage_types": [
       "Power"
@@ -892,8 +846,6 @@
   {
     "name": "Brother Jaeger",
     "portrait_url": "https://tacticusplanner.app/assets/ui_image_RoundPortrait_templ_champion_01-DthiTFm5.png",
-    "rarity": "Epic",
-    "rank": "Locked",
     "faction": "BlackTemplars",
     "damage_types": [
       "Power"
@@ -927,8 +879,6 @@
   {
     "name": "High Marshal Helbrecht",
     "portrait_url": "https://tacticusplanner.app/assets/ui_image_RoundPortrait_templ_helbrecht_01-BZkDc2a-.png",
-    "rarity": "Legendary",
-    "rank": "Locked",
     "faction": "BlackTemplars",
     "damage_types": [
       "Power",
@@ -965,8 +915,6 @@
     "id": "templSwordBrother",
     "name": "Sword Brother Godswyl",
     "portrait_url": "https://tacticusplanner.app/assets/ui_image_RoundPortrait_templ_brother_01-IN0AmCK_.png",
-    "rarity": "Common",
-    "rank": "Locked",
     "faction": "BlackTemplars",
     "damage_types": [
       "Power"
@@ -1000,8 +948,6 @@
     "id": "bloodDante",
     "name": "Dante",
     "portrait_url": "https://tacticusplanner.app/assets/ui_image_RoundPortrait_blood_dante_01-ClV8tjE4.png",
-    "rarity": "Legendary",
-    "rank": "Locked",
     "faction": "BloodAngels",
     "damage_types": [
       "Piercing",
@@ -1060,8 +1006,6 @@
     "id": "bloodDeathCompany",
     "name": "Lucien",
     "portrait_url": "https://tacticusplanner.app/assets/ui_image_RoundPortrait_blood_deathcompany_01-Hup7liKS.png",
-    "rarity": "Uncommon",
-    "rank": "Locked",
     "faction": "BloodAngels",
     "damage_types": [
       "Physical",
@@ -1100,8 +1044,6 @@
     "id": "bloodIntercessor",
     "name": "Mataneo",
     "portrait_url": "https://tacticusplanner.app/assets/ui_image_RoundPortrait_blood_intercessor_01-CUM9FuTp.png",
-    "rarity": "Uncommon",
-    "rank": "Locked",
     "faction": "BloodAngels",
     "damage_types": [
       "Plasma",
@@ -1138,8 +1080,6 @@
     "id": "bloodMephiston",
     "name": "Mephiston",
     "portrait_url": "https://tacticusplanner.app/assets/ui_image_RoundPortrait_blood_mephiston_01-zZryMY7C.png",
-    "rarity": "Legendary",
-    "rank": "Locked",
     "faction": "BloodAngels",
     "damage_types": [
       "Psychic"
@@ -1176,8 +1116,6 @@
     "id": "bloodSanguinary",
     "name": "Nicodemus",
     "portrait_url": "https://tacticusplanner.app/assets/ui_image_RoundPortrait_blood_sanguinary_01-BfLEqW4G.png",
-    "rarity": "Rare",
-    "rank": "Locked",
     "faction": "BloodAngels",
     "damage_types": [
       "Chain"
@@ -1211,8 +1149,6 @@
     "id": "custoAtlacoya",
     "name": "Atlacoya",
     "portrait_url": "https://tacticusplanner.app/assets/ui_image_RoundPortrait_custo_atlacoya_01-CpUSGulx.png",
-    "rarity": "Rare",
-    "rank": "Locked",
     "faction": "Custodes",
     "damage_types": [
       "Power",
@@ -1247,8 +1183,6 @@
     "id": "custoBladeChampion",
     "name": "Kariyan",
     "portrait_url": "https://tacticusplanner.app/assets/ui_image_RoundPortrait_custo_bladechampion_01-DRosrvb0.png",
-    "rarity": "Epic",
-    "rank": "Locked",
     "faction": "Custodes",
     "damage_types": [
       "Power",
@@ -1286,8 +1220,6 @@
   {
     "name": "Trajann",
     "portrait_url": "https://tacticusplanner.app/assets/ui_image_RoundPortrait_custo_trajann_01-Dgvru1w_.png",
-    "rarity": "Legendary",
-    "rank": "Locked",
     "faction": "Custodes",
     "damage_types": [
       "Piercing",
@@ -1323,8 +1255,6 @@
     "id": "custoVexilusPraetor",
     "name": "Aesoth",
     "portrait_url": "https://tacticusplanner.app/assets/ui_image_RoundPortrait_custo_vexilus_01-D3kdCyAb.png",
-    "rarity": "Uncommon",
-    "rank": "Locked",
     "faction": "Custodes",
     "damage_types": [
       "Physical"
@@ -1358,8 +1288,6 @@
   {
     "name": "Asmodai",
     "portrait_url": "https://tacticusplanner.app/assets/ui_image_RoundPortrait_darka_asmodai_01-8JTaPeyy.png",
-    "rarity": "Epic",
-    "rank": "Locked",
     "faction": "DarkAngels",
     "damage_types": [
       "Power"
@@ -1392,8 +1320,6 @@
     "id": "darkaAzrael",
     "name": "Azrael",
     "portrait_url": "https://tacticusplanner.app/assets/ui_image_RoundPortrait_darka_azrael_01-CcdA4kfv.png",
-    "rarity": "Epic",
-    "rank": "Locked",
     "faction": "DarkAngels",
     "damage_types": [
       "Power",
@@ -1432,8 +1358,6 @@
     "id": "darkaCompanion",
     "name": "Forcas",
     "portrait_url": "https://tacticusplanner.app/assets/ui_image_RoundPortrait_darka_companion_01-BN1GidCo.png",
-    "rarity": "Rare",
-    "rank": "Locked",
     "faction": "DarkAngels",
     "damage_types": [
       "Power"
@@ -1467,8 +1391,6 @@
     "id": "darkaHellblaster",
     "name": "Sarquael",
     "portrait_url": "https://tacticusplanner.app/assets/ui_image_RoundPortrait_darka_hellblaster_01-VmEoMdEV.png",
-    "rarity": "Uncommon",
-    "rank": "Locked",
     "faction": "DarkAngels",
     "damage_types": [
       "Physical",
@@ -1506,8 +1428,6 @@
     "id": "darkaTerminator",
     "name": "Baraqiel",
     "portrait_url": "https://tacticusplanner.app/assets/ui_image_RoundPortrait_darka_terminator_01-B9kKsDZO.png",
-    "rarity": "Uncommon",
-    "rank": "Locked",
     "faction": "DarkAngels",
     "damage_types": [
       "Power",
@@ -1543,8 +1463,6 @@
   {
     "name": "Corrodius",
     "portrait_url": "https://tacticusplanner.app/assets/ui_image_RoundPortrait_death_blightbringer_01-Bj8Sue_h.png",
-    "rarity": "Rare",
-    "rank": "Locked",
     "faction": "DeathGuard",
     "damage_types": [
       "Plasma"
@@ -1578,8 +1496,6 @@
     "id": "deathBlightlord",
     "name": "Maladus",
     "portrait_url": "https://tacticusplanner.app/assets/ui_image_RoundPortrait_death_blightlord_01-Cw3n2i6b.png",
-    "rarity": "Uncommon",
-    "rank": "Locked",
     "faction": "DeathGuard",
     "damage_types": [
       "Power"
@@ -1614,8 +1530,6 @@
     "id": "deathPutrifier",
     "name": "Pestillian",
     "portrait_url": "https://tacticusplanner.app/assets/ui_image_RoundPortrait_death_putrifier_01-DJsx9vag.png",
-    "rarity": "Rare",
-    "rank": "Locked",
     "faction": "DeathGuard",
     "damage_types": [
       "Toxic"
@@ -1650,8 +1564,6 @@
     "id": "deathRotbone",
     "name": "Nauseous Rotbone",
     "portrait_url": "https://tacticusplanner.app/assets/ui_image_RoundPortrait_death_rotbone_01-DltPCvZX.png",
-    "rarity": "Epic",
-    "rank": "Locked",
     "faction": "DeathGuard",
     "damage_types": [
       "Power"
@@ -1686,8 +1598,6 @@
     "id": "deathTyphus",
     "name": "Typhus",
     "portrait_url": "https://tacticusplanner.app/assets/ui_image_RoundPortrait_death_typhus_01-B1MZRkD7.png",
-    "rarity": "Legendary",
-    "rank": "Locked",
     "faction": "DeathGuard",
     "damage_types": [
       "Power",
@@ -1727,8 +1637,6 @@
     "id": "emperKakophonist",
     "name": "Adamatar",
     "portrait_url": "https://tacticusplanner.app/assets/ui_image_RoundPortrait_emper_kakophonist_01-CkCXSQJu.png",
-    "rarity": "Rare",
-    "rank": "Locked",
     "faction": "EmperorsChildren",
     "damage_types": [
       "Eviscerate",
@@ -1761,8 +1669,6 @@
   {
     "name": "Lucius",
     "portrait_url": "https://tacticusplanner.app/assets/ui_image_RoundPortrait_emper_lucius_01-DLMwNsih.png",
-    "rarity": "Legendary",
-    "rank": "Locked",
     "faction": "EmperorsChildren",
     "damage_types": [
       "Power",
@@ -1797,8 +1703,6 @@
     "id": "emperNoiseMarine",
     "name": "Shiron",
     "portrait_url": "https://tacticusplanner.app/assets/ui_image_RoundPortrait_emper_noisemarine_01-DUuuzA6_.png",
-    "rarity": "Uncommon",
-    "rank": "Locked",
     "faction": "EmperorsChildren",
     "damage_types": [
       "Eviscerate",
@@ -1835,8 +1739,6 @@
   {
     "name": "Hollan",
     "portrait_url": "https://tacticusplanner.app/assets/ui_image_RoundPortrait_genes_biophagus_01-CNZoS2X6.png",
-    "rarity": "Uncommon",
-    "rank": "Locked",
     "faction": "Genestealers",
     "damage_types": [
       "Toxic"
@@ -1870,8 +1772,6 @@
     "id": "genesKelermorph",
     "name": "Judh",
     "portrait_url": "https://tacticusplanner.app/assets/ui_image_RoundPortrait_genes_kelermorph_01-Blfg_cSR.png",
-    "rarity": "Epic",
-    "rank": "Locked",
     "faction": "Genestealers",
     "damage_types": [
       "Projectile"
@@ -1906,8 +1806,6 @@
   {
     "name": "Xybia",
     "portrait_url": "https://tacticusplanner.app/assets/ui_image_RoundPortrait_genes_magus_01-Dpd87Lrh.png",
-    "rarity": "Rare",
-    "rank": "Locked",
     "faction": "Genestealers",
     "damage_types": [
       "Psychic"
@@ -1942,8 +1840,6 @@
   {
     "name": "The Patermine",
     "portrait_url": "https://tacticusplanner.app/assets/ui_image_RoundPortrait_genes_patriarch_01-Cp7Hve-S.png",
-    "rarity": "Legendary",
-    "rank": "Locked",
     "faction": "Genestealers",
     "damage_types": [
       "Eviscerate",
@@ -1980,8 +1876,6 @@
     "id": "genesPrimus",
     "name": "Isaak",
     "portrait_url": "https://tacticusplanner.app/assets/ui_image_RoundPortrait_genes_primus_01-2yzvPFQz.png",
-    "rarity": "Rare",
-    "rank": "Locked",
     "faction": "Genestealers",
     "damage_types": [
       "Bio",
@@ -2017,8 +1911,6 @@
     "id": "necroDestroyer",
     "name": "Imospekh",
     "portrait_url": "https://tacticusplanner.app/assets/ui_image_RoundPortrait_necro_hexmark_01-DxFTXmGc.png",
-    "rarity": "Common",
-    "rank": "Locked",
     "faction": "Necrons",
     "damage_types": [
       "Molecular"
@@ -2055,8 +1947,6 @@
     "id": "necroOverlord",
     "name": "Anuphet",
     "portrait_url": "https://tacticusplanner.app/assets/ui_image_RoundPortrait_necro_overlord_01-Bv4diFNq.png",
-    "rarity": "Epic",
-    "rank": "Locked",
     "faction": "Necrons",
     "damage_types": [
       "Energy"
@@ -2091,8 +1981,6 @@
   {
     "name": "Thutmose",
     "portrait_url": "https://tacticusplanner.app/assets/ui_image_RoundPortrait_necro_plasmancer_01-DCDysoR1.png",
-    "rarity": "Rare",
-    "rank": "Locked",
     "faction": "Necrons",
     "damage_types": [
       "Plasma",
@@ -2130,8 +2018,6 @@
     "id": "necroSpyder",
     "name": "Aleph-Null",
     "portrait_url": "https://tacticusplanner.app/assets/ui_image_RoundPortrait_necro_spyder_01-BuDHT4jo.png",
-    "rarity": "Uncommon",
-    "rank": "Locked",
     "faction": "Necrons",
     "damage_types": [
       "Particle"
@@ -2168,8 +2054,6 @@
     "id": "necroWarden",
     "name": "Makhotep",
     "portrait_url": "https://tacticusplanner.app/assets/ui_image_RoundPortrait_necro_warden_01-Bd6opu8x.png",
-    "rarity": "Common",
-    "rank": "Locked",
     "faction": "Necrons",
     "damage_types": [
       "Physical",
@@ -2206,8 +2090,6 @@
     "id": "orksBigMek",
     "name": "Gibbascrapz",
     "portrait_url": "https://tacticusplanner.app/assets/ui_image_RoundPortrait_orkss_mek_01-Bygouc4N.png",
-    "rarity": "Common",
-    "rank": "Locked",
     "faction": "Orks",
     "damage_types": [
       "Physical"
@@ -2241,8 +2123,6 @@
     "id": "orksKillaKan",
     "name": "Snappawrecka",
     "portrait_url": "https://tacticusplanner.app/assets/ui_image_RoundPortrait_orkss_killakan_01-BCbl2NH3.png",
-    "rarity": "Uncommon",
-    "rank": "Locked",
     "faction": "Orks",
     "damage_types": [
       "Chain",
@@ -2280,8 +2160,6 @@
   {
     "name": "Tanksmasha",
     "portrait_url": "https://tacticusplanner.app/assets/ui_image_RoundPortrait_orkss_nob_01-D4L8obj5.png",
-    "rarity": "Epic",
-    "rank": "Locked",
     "faction": "Orks",
     "damage_types": [
       "Eviscerate",
@@ -2317,8 +2195,6 @@
     "id": "orksRuntherd",
     "name": "Snotflogga",
     "portrait_url": "https://tacticusplanner.app/assets/ui_image_RoundPortrait_orkss_runtherd_01-BVnBJYW2.png",
-    "rarity": "Rare",
-    "rank": "Locked",
     "faction": "Orks",
     "damage_types": [
       "Physical"
@@ -2352,8 +2228,6 @@
     "id": "orksWarboss",
     "name": "Boss Gulgortz",
     "portrait_url": "https://tacticusplanner.app/assets/ui_image_RoundPortrait_orkss_warboss_01-ET7kHNrL.png",
-    "rarity": "Epic",
-    "rank": "Locked",
     "faction": "Orks",
     "damage_types": [
       "Eviscerate",
@@ -2393,8 +2267,6 @@
     "id": "adeptCanoness",
     "name": "Roswitha",
     "portrait_url": "https://tacticusplanner.app/assets/ui_image_RoundPortrait_adept_canoness_01-CH_a8lys.png",
-    "rarity": "Uncommon",
-    "rank": "Locked",
     "faction": "Sisterhood",
     "damage_types": [
       "Chain",
@@ -2430,8 +2302,6 @@
   {
     "name": "Celestine",
     "portrait_url": "https://tacticusplanner.app/assets/ui_image_RoundPortrait_adept_celestine_01-BQfVmRS6.png",
-    "rarity": "Legendary",
-    "rank": "Locked",
     "faction": "Sisterhood",
     "damage_types": [
       "Power"
@@ -2465,8 +2335,6 @@
     "id": "adeptHospitaller",
     "name": "Isabella",
     "portrait_url": "https://tacticusplanner.app/assets/ui_image_RoundPortrait_adept_hospitaller_01-BpQcwFJ1.png",
-    "rarity": "Rare",
-    "rank": "Locked",
     "faction": "Sisterhood",
     "damage_types": [
       "Bolter"
@@ -2499,8 +2367,6 @@
   {
     "name": "Morvenn Vahl",
     "portrait_url": "https://tacticusplanner.app/assets/ui_image_RoundPortrait_adept_morvenn_01-IAqvBba0.png",
-    "rarity": "Legendary",
-    "rank": "Locked",
     "faction": "Sisterhood",
     "damage_types": [
       "Power",
@@ -2540,7 +2406,6 @@
     "id": "adeptRetributor",
     "name": "Vindicta",
     "portrait_url": "https://tacticusplanner.app/assets/ui_image_RoundPortrait_adept_retributor_01-BRsj7-J5.png",
-    "rarity": "Common",
     "faction": "Sisterhood",
     "damage_types": [
       "Physical",
@@ -2576,8 +2441,6 @@
   {
     "name": "Ragnar",
     "portrait_url": "https://tacticusplanner.app/assets/ui_image_RoundPortrait_space_ragnar_01-DVl4CrSH.png",
-    "rarity": "Legendary",
-    "rank": "Locked",
     "faction": "SpaceWolves",
     "damage_types": [
       "Chain"
@@ -2612,8 +2475,6 @@
     "id": "spaceHound",
     "name": "Tjark",
     "portrait_url": "https://tacticusplanner.app/assets/ui_image_RoundPortrait_space_hound_01-DcBD8tVu.png",
-    "rarity": "Uncommon",
-    "rank": "Locked",
     "faction": "SpaceWolves",
     "damage_types": [
       "Physical"
@@ -2646,8 +2507,6 @@
   {
     "name": "Arjac",
     "portrait_url": "https://tacticusplanner.app/assets/ui_image_RoundPortrait_space_arjac_01-Bho04M0U.png",
-    "rarity": "Rare",
-    "rank": "Locked",
     "faction": "SpaceWolves",
     "damage_types": [
       "Power"
@@ -2683,8 +2542,6 @@
     "id": "spaceStormcaller",
     "name": "Njal",
     "portrait_url": "https://tacticusplanner.app/assets/ui_image_RoundPortrait_space_stormcaller_01-D0or_AW7.png",
-    "rarity": "Epic",
-    "rank": "Locked",
     "faction": "SpaceWolves",
     "damage_types": [
       "Psychic"
@@ -2721,8 +2578,6 @@
     "id": "spaceWulfen",
     "name": "Ulf",
     "portrait_url": "https://tacticusplanner.app/assets/ui_image_RoundPortrait_space_wulfen_01-DK0u-b4g.png",
-    "rarity": "Uncommon",
-    "rank": "Locked",
     "faction": "SpaceWolves",
     "damage_types": [
       "Power",
@@ -2756,8 +2611,6 @@
   {
     "name": "Aun'Shi",
     "portrait_url": "https://tacticusplanner.app/assets/ui_image_RoundPortrait_tauta_aunshi_01-BNPvxL9x.png",
-    "rarity": "Legendary",
-    "rank": "Locked",
     "faction": "Tau",
     "damage_types": [
       "Power"
@@ -2788,8 +2641,6 @@
     "id": "tauCrisis",
     "name": "Re'vas",
     "portrait_url": "https://tacticusplanner.app/assets/ui_image_RoundPortrait_tauta_crisis_01-oOq9GEZ8.png",
-    "rarity": "Uncommon",
-    "rank": "Locked",
     "faction": "Tau",
     "damage_types": [
       "Flame",
@@ -2829,8 +2680,6 @@
     "id": "tauDarkstrider",
     "name": "Darkstrider",
     "portrait_url": "https://tacticusplanner.app/assets/ui_image_RoundPortrait_tauta_darkstrider_01-B-9OwBF2.png",
-    "rarity": "Rare",
-    "rank": "Locked",
     "faction": "Tau",
     "damage_types": [
       "Physical",
@@ -2868,8 +2717,6 @@
     "id": "tauMarksman",
     "name": "Sho'syl",
     "portrait_url": "https://tacticusplanner.app/assets/ui_image_RoundPortrait_tauta_marksman_01-CixMTXAS.png",
-    "rarity": "Uncommon",
-    "rank": "Locked",
     "faction": "Tau",
     "damage_types": [
       "Pulse",
@@ -2907,8 +2754,6 @@
     "id": "tauShadowsun",
     "name": "Shadowsun",
     "portrait_url": "https://tacticusplanner.app/assets/ui_image_RoundPortrait_tauta_shadowsun_01-BxMhdX1U.png",
-    "rarity": "Legendary",
-    "rank": "Locked",
     "faction": "Tau",
     "damage_types": [
       "Blast",
@@ -2946,8 +2791,6 @@
   {
     "name": "Ahriman",
     "portrait_url": "https://tacticusplanner.app/assets/ui_image_RoundPortrait_thous_ahriman_01-QhIaMfk7.png",
-    "rarity": "Legendary",
-    "rank": "Locked",
     "faction": "ThousandSons",
     "damage_types": [
       "Flame",
@@ -2985,8 +2828,6 @@
     "id": "thousInfernalMaster",
     "name": "Abraxas",
     "portrait_url": "https://tacticusplanner.app/assets/ui_image_RoundPortrait_thous_infernal_01-BN9duryJ.png",
-    "rarity": "Rare",
-    "rank": "Locked",
     "faction": "ThousandSons",
     "damage_types": [
       "Flame",
@@ -3022,8 +2863,6 @@
   {
     "name": "Thaumachus",
     "portrait_url": "https://tacticusplanner.app/assets/ui_image_RoundPortrait_thous_sorcerer_01-DRsHIAgY.png",
-    "rarity": "Epic",
-    "rank": "Locked",
     "faction": "ThousandSons",
     "damage_types": [
       "Flame",
@@ -3061,8 +2900,6 @@
     "id": "thousTerminator",
     "name": "Toth",
     "portrait_url": "https://tacticusplanner.app/assets/ui_image_RoundPortrait_thous_terminator_01-BzVwewjg.png",
-    "rarity": "Uncommon",
-    "rank": "Locked",
     "faction": "ThousandSons",
     "damage_types": [
       "Power",
@@ -3101,8 +2938,6 @@
     "id": "thousTzaangor",
     "name": "Yazaghor",
     "portrait_url": "https://tacticusplanner.app/assets/ui_image_RoundPortrait_thous_tzaangor_01-CHrQWYJ9.png",
-    "rarity": "Common",
-    "rank": "Locked",
     "faction": "ThousandSons",
     "damage_types": [
       "Physical",
@@ -3140,8 +2975,6 @@
     "id": "tyranDeathleaper",
     "name": "Deathleaper",
     "portrait_url": "https://tacticusplanner.app/assets/ui_image_RoundPortrait_tyran_deathleaper_01-CghNs0dU.png",
-    "rarity": "Epic",
-    "rank": "Locked",
     "faction": "Tyranids",
     "damage_types": [
       "Bio",
@@ -3178,8 +3011,6 @@
     "id": "tyranNeurothrope",
     "name": "Neurothrope",
     "portrait_url": "https://tacticusplanner.app/assets/ui_image_RoundPortrait_tyran_neurothrope_01-C9KiELUD.png",
-    "rarity": "Rare",
-    "rank": "Locked",
     "faction": "Tyranids",
     "damage_types": [
       "Physical",
@@ -3219,8 +3050,6 @@
     "id": "tyranParasite",
     "name": "Parasite of Mortrex",
     "portrait_url": "https://tacticusplanner.app/assets/ui_image_RoundPortrait_tyran_parasite_01-C4oyMX46.png",
-    "rarity": "Epic",
-    "rank": "Locked",
     "faction": "Tyranids",
     "damage_types": [
       "Toxic"
@@ -3254,8 +3083,6 @@
     "id": "tyranTyrantGuard",
     "name": "Tyrant Guard",
     "portrait_url": "https://tacticusplanner.app/assets/ui_image_RoundPortrait_tyran_tyrantguard_01-ChH560oh.png",
-    "rarity": "Uncommon",
-    "rank": "Locked",
     "faction": "Tyranids",
     "damage_types": [
       "Piercing",
@@ -3290,8 +3117,6 @@
     "id": "tyranWingedPrime",
     "name": "Winged Prime",
     "portrait_url": "https://tacticusplanner.app/assets/ui_image_RoundPortrait_tyran_wingedprime_01-OSfeh6My.png",
-    "rarity": "Rare",
-    "rank": "Locked",
     "faction": "Tyranids",
     "damage_types": [
       "Bio"
@@ -3326,7 +3151,6 @@
     "id": "ultraApothecary",
     "name": "Incisus",
     "portrait_url": "https://tacticusplanner.app/assets/ui_image_RoundPortrait_ultra_apothecary_01-qXaTmKkV.png",
-    "rarity": "Common",
     "faction": "Ultramarines",
     "damage_types": [
       "Piercing"
@@ -3358,8 +3182,6 @@
   {
     "name": "Marneus Calgar",
     "portrait_url": "https://tacticusplanner.app/assets/ui_image_RoundPortrait_ultra_calgar_01-Bkb3ymaI.png",
-    "rarity": "Legendary",
-    "rank": "Locked",
     "faction": "Ultramarines",
     "damage_types": [
       "Power",
@@ -3394,7 +3216,6 @@
     "id": "ultraEliminatorSgt",
     "name": "Certus",
     "portrait_url": "https://tacticusplanner.app/assets/ui_image_RoundPortrait_ultra_eliminator_01-B10ftHdp.png",
-    "rarity": "Common",
     "faction": "Ultramarines",
     "damage_types": [
       "Physical",
@@ -3433,7 +3254,6 @@
     "id": "ultraInceptorSgt",
     "name": "Bellator",
     "portrait_url": "https://tacticusplanner.app/assets/ui_image_RoundPortrait_ultra_inceptor_01-CLw7NdYx.png",
-    "rarity": "Common",
     "faction": "Ultramarines",
     "damage_types": [
       "Bolter"
@@ -3467,7 +3287,6 @@
     "id": "ultraTigurius",
     "name": "Varro Tigurius",
     "portrait_url": "https://tacticusplanner.app/assets/ui_image_RoundPortrait_ultra_tigurius_01-Chq3r3P7.png",
-    "rarity": "Uncommon",
     "faction": "Ultramarines",
     "damage_types": [
       "Physical",
@@ -3503,8 +3322,6 @@
     "id": "ultraTitus",
     "name": "Titus",
     "portrait_url": "https://tacticusplanner.app/assets/ui_image_RoundPortrait_ultra_titus_01-BkORRZ8b.png",
-    "rarity": "Epic",
-    "rank": "Locked",
     "faction": "Ultramarines",
     "damage_types": [
       "Chain",
@@ -3539,8 +3356,6 @@
     "id": "worldEightbound",
     "name": "Azkor",
     "portrait_url": "https://tacticusplanner.app/assets/ui_image_RoundPortrait_world_eightbound_01-BPfISvYb.png",
-    "rarity": "Rare",
-    "rank": "Locked",
     "faction": "WorldEaters",
     "damage_types": [
       "Eviscerate"
@@ -3577,8 +3392,6 @@
     "id": "worldExecutions",
     "name": "Tarvakh",
     "portrait_url": "https://tacticusplanner.app/assets/ui_image_RoundPortrait_world_executions_01-do0yhc-m.png",
-    "rarity": "Rare",
-    "rank": "Locked",
     "faction": "WorldEaters",
     "damage_types": [
       "Piercing"
@@ -3612,8 +3425,6 @@
     "id": "worldJakhal",
     "name": "Macer",
     "portrait_url": "https://tacticusplanner.app/assets/ui_image_RoundPortrait_world_jakhal_01-CxxtFA48.png",
-    "rarity": "Uncommon",
-    "rank": "Locked",
     "faction": "WorldEaters",
     "damage_types": [
       "Chain",
@@ -3648,8 +3459,6 @@
     "id": "worldKharn",
     "name": "Khârn",
     "portrait_url": "https://tacticusplanner.app/assets/ui_image_RoundPortrait_world_kharn_01-B6qcV1_o.png",
-    "rarity": "Legendary",
-    "rank": "Locked",
     "faction": "WorldEaters",
     "damage_types": [
       "Eviscerate",
@@ -3686,8 +3495,6 @@
     "id": "worldTerminator",
     "name": "Wrask",
     "portrait_url": "https://tacticusplanner.app/assets/ui_image_RoundPortrait_world_terminator_01-DhcFKWGu.png",
-    "rarity": "Uncommon",
-    "rank": "Locked",
     "faction": "WorldEaters",
     "damage_types": [
       "Flame",
