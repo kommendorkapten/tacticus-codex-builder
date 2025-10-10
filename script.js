@@ -310,54 +310,273 @@ function removeCharacterFromSquad(characterName) {
 
 function updateSelectedSquadDisplay() {
     const container = document.getElementById('selectedCharacters');
-    const squadCount = document.getElementById('squadCount');
-    const clearSquadBtn = document.getElementById('clearSquad');
+    const squadCountSpan = document.getElementById('squadCount');
+    const clearButton = document.getElementById('clearSquad');
+    const synergySection = document.getElementById('synergyGraphSection');
     
-    squadCount.textContent = `(${selectedCharacters.length}/${MAX_SQUAD_SIZE})`;
+    squadCountSpan.textContent = `(${selectedCharacters.length}/${MAX_SQUAD_SIZE})`;
     
     if (selectedCharacters.length === 0) {
         container.innerHTML = '<p class="empty-squad-message">Select up to 5 characters to build your squad</p>';
-        clearSquadBtn.style.display = 'none';
-    } else {
-        container.innerHTML = '';
-        clearSquadBtn.style.display = 'inline-block';
-        
-        selectedCharacters.forEach(character => {
-            const card = document.createElement('div');
-            card.className = 'selected-character-card';
-            
-            const alliance = character.grand_alliance || 'None';
-            card.style.borderColor = getAllianceColor(alliance);
-            
-            const img = document.createElement('img');
-            img.src = character.portrait_url || 'placeholder.png';
-            img.alt = character.name || 'Character';
-            img.className = 'portrait';
-            img.onerror = function() {
-                this.src = 'https://via.placeholder.com/60x60?text=No+Image';
-            };
-            
-            const name = document.createElement('div');
-            name.className = 'name';
-            name.textContent = character.name || 'Unknown';
-            
-            const faction = document.createElement('div');
-            faction.className = 'faction';
-            faction.textContent = character.faction || 'Unknown';
-            
-            const removeBtn = document.createElement('button');
-            removeBtn.className = 'remove-btn';
-            removeBtn.textContent = '×';
-            removeBtn.addEventListener('click', () => removeCharacterFromSquad(character.name));
-            
-            card.appendChild(removeBtn);
-            card.appendChild(img);
-            card.appendChild(name);
-            card.appendChild(faction);
-            
-            container.appendChild(card);
-        });
+        clearButton.style.display = 'none';
+        synergySection.style.display = 'none';
+        return;
     }
+    
+    clearButton.style.display = 'block';
+    synergySection.style.display = 'block';
+    
+    container.innerHTML = selectedCharacters.map(char => `
+        <div class="selected-character-card ${getAllianceClass(char.grand_alliance)}">
+            <button class="remove-btn" onclick="toggleCharacterSelection(${JSON.stringify(char).replace(/"/g, '&quot;')})">×</button>
+            <img src="${char.portrait_url}" alt="${char.name}" class="selected-character-image" title="${char.name} (${char.faction})">
+        </div>
+    `).join('');
+    
+    renderSynergyGraph();
+}
+
+let cy = null; // Store Cytoscape instance
+
+function renderSynergyGraph() {
+    const container = document.getElementById('synergyGraph');
+    
+    // Clear and create Cytoscape container with overlay for images
+    container.innerHTML = '<div id="cy"></div><div id="node-overlays"></div>';
+    
+    // Build nodes and edges for Cytoscape
+    const elements = [];
+    
+    // Add nodes
+    selectedCharacters.forEach((char, index) => {
+        const allianceColor = getAllianceColorForGraph(char.grand_alliance);
+        console.log(`Node ${index}: ${char.name}, Portrait URL: ${char.portrait_url}`);
+        elements.push({
+            data: { 
+                id: `node-${index}`, 
+                label: char.name,
+                faction: char.faction,
+                alliance: char.grand_alliance,
+                portrait: char.portrait_url,
+                allianceColor: allianceColor
+            }
+        });
+    });
+    
+    // Add edges (arrows) based on buffs
+    selectedCharacters.forEach((sourceChar, sourceIndex) => {
+        if (!sourceChar.buffs || sourceChar.buffs.length === 0) {
+            return;
+        }
+        
+        sourceChar.buffs.forEach(buff => {
+            if (!buff.affects) return;
+            
+            const affectsGrandAlliance = buff.affects.grand_alliance || [];
+            const affectsFaction = buff.affects.faction || [];
+            const affectsTraits = buff.affects.traits || [];
+            
+            selectedCharacters.forEach((targetChar, targetIndex) => {
+                if (sourceIndex === targetIndex) return; // Don't draw arrow to self
+                
+                let matches = false;
+                let isUniversal = false;
+                
+                // Check for universal buff (*)
+                if (affectsGrandAlliance.includes('*') || affectsFaction.includes('*')) {
+                    matches = true;
+                    isUniversal = true;
+                }
+                // Check grand alliance match
+                else if (affectsGrandAlliance.includes(targetChar.grand_alliance)) {
+                    matches = true;
+                }
+                // Check faction match
+                else if (affectsFaction.includes(targetChar.faction)) {
+                    matches = true;
+                }
+                // Check trait match - target must have at least one of the traits
+                else if (affectsTraits.length > 0 && targetChar.traits) {
+                    const hasMatchingTrait = affectsTraits.some(trait => 
+                        targetChar.traits.includes(trait)
+                    );
+                    if (hasMatchingTrait) {
+                        matches = true;
+                    }
+                }
+                
+                if (matches) {
+                    const edgeColor = isUniversal ? '#d4af37' : getAllianceColorForGraph(sourceChar.grand_alliance);
+                    const edgeWidth = isUniversal ? 4 : 2;
+                    const isTraitBuff = affectsTraits.length > 0;
+                    
+                    elements.push({
+                        data: {
+                            id: `edge-${sourceIndex}-${targetIndex}-${buff.name}`,
+                            source: `node-${sourceIndex}`,
+                            target: `node-${targetIndex}`,
+                            label: buff.name,
+                            isUniversal: isUniversal,
+                            isTraitBuff: isTraitBuff
+                        },
+                        style: {
+                            'line-color': edgeColor,
+                            'target-arrow-color': edgeColor,
+                            'width': edgeWidth
+                        }
+                    });
+                }
+            });
+        });
+    });
+    
+    // Initialize Cytoscape
+    if (cy) {
+        cy.destroy();
+    }
+    
+    cy = cytoscape({
+        container: document.getElementById('cy'),
+        elements: elements,
+        style: [
+            {
+                selector: 'node',
+                style: {
+                    'label': '',
+                    'width': 50,
+                    'height': 50,
+                    'background-color': '#1a1a2a',
+                    'border-color': 'data(allianceColor)',
+                    'border-width': 2,
+                    'border-opacity': 1,
+                    'shape': 'roundrectangle'
+                }
+            },
+            {
+                selector: 'edge',
+                style: {
+                    'width': 2,
+                    'curve-style': 'bezier',
+                    'target-arrow-shape': 'triangle',
+                    'arrow-scale': 1.5,
+                    'opacity': 0.8,
+                    'label': 'data(label)',
+                    'font-size': 10,
+                    'color': '#ffffff',
+                    'text-background-color': '#000000',
+                    'text-background-opacity': 0.8,
+                    'text-background-padding': 3,
+                    'text-rotation': 'autorotate'
+                }
+            },
+            {
+                selector: 'edge[?isUniversal]',
+                style: {
+                    'line-style': 'solid',
+                    'width': 4
+                }
+            },
+            {
+                selector: 'edge[?isTraitBuff]',
+                style: {
+                    'line-style': 'dashed',
+                    'line-dash-pattern': [6, 3]
+                }
+            }
+        ],
+        layout: {
+            name: 'breadthfirst',
+            directed: true,
+            spacingFactor: 1.5,
+            avoidOverlap: true,
+            nodeDimensionsIncludeLabels: true,
+            animate: true,
+            animationDuration: 500
+        },
+        userZoomingEnabled: true,
+        userPanningEnabled: true,
+        boxSelectionEnabled: false
+    });
+    
+    // Add tooltips on hover
+    cy.on('mouseover', 'node', function(event) {
+        const node = event.target;
+        const data = node.data();
+        node.style({
+            'width': 70,
+            'height': 70,
+            'border-width': 3
+        });
+        updateNodeImageOverlays();
+    });
+    
+    cy.on('mouseout', 'node', function(event) {
+        const node = event.target;
+        node.style({
+            'width': 50,
+            'height': 50,
+            'border-width': 2
+        });
+        updateNodeImageOverlays();
+    });
+    
+    // Create HTML overlays for images (to avoid CORS issues)
+    updateNodeImageOverlays();
+    
+    // Update overlays when graph is panned or zoomed
+    cy.on('pan zoom resize', function() {
+        updateNodeImageOverlays();
+    });
+}
+
+function updateNodeImageOverlays() {
+    const overlayContainer = document.getElementById('node-overlays');
+    if (!overlayContainer || !cy) return;
+    
+    overlayContainer.innerHTML = '';
+    
+    cy.nodes().forEach(node => {
+        const position = node.renderedPosition();
+        const width = node.renderedWidth();
+        const height = node.renderedHeight();
+        const data = node.data();
+        
+        // Create image element
+        const imgWrapper = document.createElement('div');
+        imgWrapper.style.position = 'absolute';
+        imgWrapper.style.left = `${position.x - width/2}px`;
+        imgWrapper.style.top = `${position.y - height/2}px`;
+        imgWrapper.style.width = `${width}px`;
+        imgWrapper.style.height = `${height}px`;
+        imgWrapper.style.pointerEvents = 'none';
+        imgWrapper.style.borderRadius = '8px';
+        imgWrapper.style.overflow = 'hidden';
+        
+        const img = document.createElement('img');
+        img.src = data.portrait;
+        img.style.width = '100%';
+        img.style.height = '100%';
+        img.style.objectFit = 'cover';
+        img.style.display = 'block';
+        
+        imgWrapper.appendChild(img);
+        overlayContainer.appendChild(imgWrapper);
+    });
+}
+
+function getAllianceColorForGraph(alliance) {
+    const colors = {
+        'Imperial': '#4a90e2',
+        'Chaos': '#dc143c',
+        'Xenos': '#9b59b6'
+    };
+    return colors[alliance] || '#667ee6';
+}
+
+function getAllianceClass(alliance) {
+    if (!alliance) return '';
+    const normalized = alliance.toLowerCase().replace(/\s+/g, '-');
+    return `alliance-${normalized}`;
 }
 
 function getAllianceColor(alliance) {

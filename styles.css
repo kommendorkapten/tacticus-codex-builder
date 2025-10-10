@@ -129,26 +129,156 @@ header h1 {
     box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
 }
 
+/* Clear Button */
 .clear-button {
+    margin-top: 20px;
     padding: 10px 20px;
-    background: linear-gradient(135deg, #ff6b6b 0%, #ee5a6f 100%);
-    color: white;
-    border: none;
-    border-radius: 8px;
-    font-weight: 600;
+    background: linear-gradient(135deg, #8b0000, #dc143c);
+    color: #fff;
+    border: 1px solid #ff4444;
+    border-radius: 5px;
     cursor: pointer;
-    transition: all 0.3s;
-    font-size: 1em;
+    font-family: 'Cinzel', serif;
+    font-size: 14px;
+    transition: all 0.3s ease;
 }
 
 .clear-button:hover {
+    background: linear-gradient(135deg, #dc143c, #ff4444);
     transform: translateY(-2px);
-    box-shadow: 0 4px 12px rgba(238, 90, 111, 0.4);
+    box-shadow: 0 4px 8px rgba(220, 20, 60, 0.4);
 }
 
-.clear-button:active {
-    transform: translateY(0);
+/* Synergy Graph */
+.synergy-graph {
+    background: rgba(10, 10, 15, 0.95);
+    border: 2px solid #2a2a3a;
+    border-radius: 10px;
+    padding: 30px;
+    margin: 30px 0;
 }
+
+.synergy-graph h2 {
+    color: #d4af37;
+    font-family: 'Cinzel', serif;
+    text-align: center;
+    margin-bottom: 10px;
+    font-size: 28px;
+    text-shadow: 0 0 10px rgba(212, 175, 55, 0.5);
+}
+
+.synergy-subtitle {
+    text-align: center;
+    color: #8a8a9a;
+    font-size: 14px;
+    margin-bottom: 30px;
+    font-style: italic;
+}
+
+.graph-container {
+    position: relative;
+    min-height: 600px;
+    height: 600px;
+    padding: 20px;
+    background: rgba(0, 0, 0, 0.3);
+    border-radius: 8px;
+    border: 1px solid #1a1a2a;
+}
+
+#cy {
+    width: 100%;
+    height: 100%;
+    position: relative;
+}
+
+#node-overlays {
+    position: absolute;
+    top: 20px;
+    left: 20px;
+    width: calc(100% - 40px);
+    height: calc(100% - 40px);
+    pointer-events: none;
+    z-index: 1;
+}
+
+.graph-node {
+    position: relative;
+    background: rgba(20, 20, 30, 0.9);
+    border: 2px solid #3a3a4a;
+    border-radius: 10px;
+    padding: 15px;
+    text-align: center;
+    transition: all 0.3s ease;
+    z-index: 2;
+}
+
+.graph-node:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 16px rgba(212, 175, 55, 0.3);
+    border-color: #d4af37;
+}
+
+.graph-node-image {
+    width: 100%;
+    height: 150px;
+    object-fit: cover;
+    border-radius: 5px;
+    margin-bottom: 10px;
+    border: 2px solid #2a2a3a;
+}
+
+.graph-node-name {
+    font-family: 'Cinzel', serif;
+    color: #d4af37;
+    font-size: 16px;
+    font-weight: bold;
+    margin-bottom: 5px;
+}
+
+.graph-node-faction {
+    font-size: 12px;
+    color: #8a8a9a;
+}
+
+.graph-arrows {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+    z-index: 1;
+}
+
+.buff-arrow {
+    stroke-width: 2;
+    fill: none;
+    opacity: 0.8;
+    filter: drop-shadow(0 0 3px currentColor);
+}
+
+.buff-arrow-imperial {
+    stroke: #4a90e2;
+}
+
+.buff-arrow-chaos {
+    stroke: #dc143c;
+}
+
+.buff-arrow-xenos {
+    stroke: #9b59b6;
+}
+
+.buff-arrow-universal {
+    stroke: #d4af37;
+    stroke-width: 3;
+}
+
+.arrow-marker {
+    fill: currentColor;
+}
+
+/* Table Container */
 
 .filter-info {
     margin-top: 15px;
