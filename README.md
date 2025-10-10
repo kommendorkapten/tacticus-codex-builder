@@ -1,10 +1,12 @@
 # Tacticus Character Database
 
-A static website that displays Warhammer 40,000: Tacticus character data in a sortable, interactive table format.
+A static website that displays Warhammer 40,000: Tacticus character
+data in a sortable, interactive table format.
 
 ## Features
 
-- **Dynamic Data Loading**: Character data is loaded from `data/units.json` via JavaScript fetch API
+- **Dynamic Data Loading**: Character data is loaded from
+  `data/units.json` via JavaScript fetch API
 - **Sortable Columns**: Click on column headers to sort by:
   - Name
   - Faction
@@ -15,8 +17,10 @@ A static website that displays Warhammer 40,000: Tacticus character data in a so
   - Character traits with color-coded badges
   - Stats displayed in a grid format
   - Alliance information with themed styling
-- **Responsive Design**: Mobile-friendly layout that adapts to different screen sizes
-- **Modern UI**: Gradient backgrounds, smooth animations, and hover effects
+- **Responsive Design**: Mobile-friendly layout that adapts to
+  different screen sizes
+- **Modern UI**: Gradient backgrounds, smooth animations, and hover
+  effects
 
 ## File Structure
 
@@ -39,10 +43,10 @@ builder/
    ```bash
    # Using Python 3
    python3 -m http.server 8000
-   
+
    # Or using Python 2
    python -m SimpleHTTPServer 8000
-   
+
    # Or using Node.js (if you have http-server installed)
    npx http-server -p 8000
    ```
@@ -50,7 +54,8 @@ builder/
 
 ### Sorting
 
-- Click on any column header with an arrow indicator (Name, Faction, Alliance)
+- Click on any column header with an arrow indicator (Name, Faction,
+  Alliance)
 - First click sorts ascending (A-Z)
 - Second click sorts descending (Z-A)
 - Click another column to sort by that column
@@ -78,13 +83,16 @@ The website expects character data in the following JSON format:
 
 ## Future Enhancements
 
-As noted in the requirements, this static site is designed to be easily upgraded to a dynamic, data-driven application in future iterations. The current architecture separates:
+As noted in the requirements, this static site is designed to be
+easily upgraded to a dynamic, data-driven application in future
+iterations. The current architecture separates:
 
 - Data (JSON file)
 - Presentation (HTML/CSS)
 - Logic (JavaScript)
 
-This makes it straightforward to replace the static JSON file with API calls to a backend service.
+This makes it straightforward to replace the static JSON file with API
+calls to a backend service.
 
 ## Browser Compatibility
 
@@ -96,8 +104,10 @@ This makes it straightforward to replace the static JSON file with API calls to 
 
 To ensure users get the latest version after deployments:
 
-1. **Version Query Parameters**: CSS and JS files include `?v=X.X.X` parameters
-2. **Update Version Numbers**: When deploying changes, increment the version in `index.html`:
+1. **Version Query Parameters**: CSS and JS files include `?v=X.X.X`
+   parameters
+2. **Update Version Numbers**: When deploying changes, increment the
+   version in `index.html`:
    ```html
    <link rel="stylesheet" href="styles.css?v=1.0.1">
    <script src="script.js?v=1.0.1"></script>
@@ -106,8 +116,17 @@ To ensure users get the latest version after deployments:
 
 ### Quick Version Update
 
-Before deploying, search for `?v=` in `index.html` and increment the version number (e.g., 1.0.0 → 1.0.1).
+Before deploying, search for `?v=` in `index.html` and increment the
+version number (e.g., 1.0.0 → 1.0.1).
 
 ## License
 
-This project is part of the Tacticus Builder application.
+Creative Commons Legal Code
+
+## Related work
+
+This work builds upon crowdsourced data with sources including:
+
+* Tacticus Game
+* [Tacticus Wiki](https://tacticus.wiki.gg/wiki/Home)
+* [Tacticus Planner](https://tacticusplanner.app/)
