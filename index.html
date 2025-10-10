@@ -33,10 +33,19 @@
             <div id="filterInfo" class="filter-info"></div>
         </div>
 
+        <div class="selected-squad">
+            <h2>Selected Squad <span id="squadCount">(0/5)</span></h2>
+            <div id="selectedCharacters" class="selected-characters-grid">
+                <p class="empty-squad-message">Select up to 5 characters to build your squad</p>
+            </div>
+            <button id="clearSquad" class="clear-button" style="display: none;">Clear Squad</button>
+        </div>
+
         <div class="table-container">
             <table id="charactersTable">
                 <thead>
                     <tr>
+                        <th>Select</th>
                         <th>Portrait</th>
                         <th class="sortable" data-column="name">
                             Name <span class="sort-indicator"></span>

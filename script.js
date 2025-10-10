@@ -5,6 +5,8 @@ let sortColumn = null;
 let sortDirection = 'asc';
 let selectedTrait = '';
 let selectedDamageType = '';
+let selectedCharacters = [];
+const MAX_SQUAD_SIZE = 5;
 
 // Load and initialize the table
 async function loadCharacters() {
@@ -22,6 +24,7 @@ async function loadCharacters() {
         renderTable(filteredData);
         setupSortHandlers();
         setupFilterHandlers();
+        setupSquadHandlers();
     } catch (error) {
         console.error('Error loading character data:', error);
         document.getElementById('loading').style.display = 'none';
@@ -35,6 +38,28 @@ function renderTable(data) {
     
     data.forEach(character => {
         const row = document.createElement('tr');
+        
+        // Select button cell
+        const selectCell = document.createElement('td');
+        selectCell.style.textAlign = 'center';
+        const selectBtn = document.createElement('button');
+        selectBtn.className = 'select-btn';
+        const isSelected = selectedCharacters.some(c => c.name === character.name);
+        const isMaxReached = selectedCharacters.length >= MAX_SQUAD_SIZE;
+        
+        if (isSelected) {
+            selectBtn.textContent = 'Selected';
+            selectBtn.classList.add('selected');
+        } else {
+            selectBtn.textContent = 'Select';
+            if (isMaxReached) {
+                selectBtn.disabled = true;
+            }
+        }
+        
+        selectBtn.addEventListener('click', () => toggleCharacterSelection(character));
+        selectCell.appendChild(selectBtn);
+        row.appendChild(selectCell);
         
         const portraitCell = document.createElement('td');
         const portraitAlliance = character.grand_alliance || 'None';
@@ -253,6 +278,103 @@ function sortData(column, direction) {
         if (aValue < bValue) return direction === 'asc' ? -1 : 1;
         if (aValue > bValue) return direction === 'asc' ? 1 : -1;
         return 0;
+    });
+}
+
+// Squad management functions
+function toggleCharacterSelection(character) {
+    const index = selectedCharacters.findIndex(c => c.name === character.name);
+    
+    if (index > -1) {
+        // Remove character
+        selectedCharacters.splice(index, 1);
+    } else {
+        // Add character if under limit
+        if (selectedCharacters.length < MAX_SQUAD_SIZE) {
+            selectedCharacters.push(character);
+        }
+    }
+    
+    updateSelectedSquadDisplay();
+    renderTable(filteredData); // Re-render to update button states
+}
+
+function removeCharacterFromSquad(characterName) {
+    const index = selectedCharacters.findIndex(c => c.name === characterName);
+    if (index > -1) {
+        selectedCharacters.splice(index, 1);
+        updateSelectedSquadDisplay();
+        renderTable(filteredData);
+    }
+}
+
+function updateSelectedSquadDisplay() {
+    const container = document.getElementById('selectedCharacters');
+    const squadCount = document.getElementById('squadCount');
+    const clearSquadBtn = document.getElementById('clearSquad');
+    
+    squadCount.textContent = `(${selectedCharacters.length}/${MAX_SQUAD_SIZE})`;
+    
+    if (selectedCharacters.length === 0) {
+        container.innerHTML = '<p class="empty-squad-message">Select up to 5 characters to build your squad</p>';
+        clearSquadBtn.style.display = 'none';
+    } else {
+        container.innerHTML = '';
+        clearSquadBtn.style.display = 'inline-block';
+        
+        selectedCharacters.forEach(character => {
+            const card = document.createElement('div');
+            card.className = 'selected-character-card';
+            
+            const alliance = character.grand_alliance || 'None';
+            card.style.borderColor = getAllianceColor(alliance);
+            
+            const img = document.createElement('img');
+            img.src = character.portrait_url || 'placeholder.png';
+            img.alt = character.name || 'Character';
+            img.className = 'portrait';
+            img.onerror = function() {
+                this.src = 'https://via.placeholder.com/60x60?text=No+Image';
+            };
+            
+            const name = document.createElement('div');
+            name.className = 'name';
+            name.textContent = character.name || 'Unknown';
+            
+            const faction = document.createElement('div');
+            faction.className = 'faction';
+            faction.textContent = character.faction || 'Unknown';
+            
+            const removeBtn = document.createElement('button');
+            removeBtn.className = 'remove-btn';
+            removeBtn.textContent = '×';
+            removeBtn.addEventListener('click', () => removeCharacterFromSquad(character.name));
+            
+            card.appendChild(removeBtn);
+            card.appendChild(img);
+            card.appendChild(name);
+            card.appendChild(faction);
+            
+            container.appendChild(card);
+        });
+    }
+}
+
+function getAllianceColor(alliance) {
+    const colors = {
+        'Imperial': '#fbbf24',
+        'Chaos': '#8b0000',
+        'Xenos': '#00ff88'
+    };
+    return colors[alliance] || 'rgba(102, 126, 234, 0.5)';
+}
+
+function setupSquadHandlers() {
+    const clearSquadBtn = document.getElementById('clearSquad');
+    clearSquadBtn.addEventListener('click', () => {
+        selectedCharacters = [];
+        updateSelectedSquadDisplay();
+        renderTable(filteredData);
     });
 }
 
