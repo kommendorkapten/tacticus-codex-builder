@@ -805,10 +805,30 @@ function updateNodeImageOverlays() {
                 }
                 tableHTML += '</td>';
                 if (hasMelee) {
-                    tableHTML += `<td style="text-align: right; padding: 5px; font-size: 14px; font-weight: bold; color: #ffd700;">${totalBuffedMelee} + ${totalBuffedBonusMelee}</td>`;
+                    tableHTML += '<td style="text-align: right; padding: 5px; font-size: 14px; font-weight: bold; color: #ffd700;">';
+                    if (totalBuffedMelee > 0 && totalBuffedBonusMelee > 0) {
+                        tableHTML += `${totalBuffedMelee} + ${totalBuffedBonusMelee}`;
+                    } else if (totalBuffedMelee > 0) {
+                        tableHTML += `${totalBuffedMelee}`;
+                    } else if (totalBuffedBonusMelee > 0) {
+                        tableHTML += `${totalBuffedBonusMelee}`;
+                    } else {
+                        tableHTML += '0';
+                    }
+                    tableHTML += '</td>';
                 }
                 if (hasRange) {
-                    tableHTML += `<td style="text-align: right; padding: 5px; font-size: 14px; font-weight: bold; color: #ffd700;">${totalBuffedRange} + ${totalBuffedBonusRange}</td>`;
+                    tableHTML += '<td style="text-align: right; padding: 5px; font-size: 14px; font-weight: bold; color: #ffd700;">';
+                    if (totalBuffedRange > 0 && totalBuffedBonusRange > 0) {
+                        tableHTML += `${totalBuffedRange} + ${totalBuffedBonusRange}`;
+                    } else if (totalBuffedRange > 0) {
+                        tableHTML += `${totalBuffedRange}`;
+                    } else if (totalBuffedBonusRange > 0) {
+                        tableHTML += `${totalBuffedBonusRange}`;
+                    } else {
+                        tableHTML += '0';
+                    }
+                    tableHTML += '</td>';
                 }
                 tableHTML += '</tr>';
             }
