@@ -998,29 +998,29 @@
       }
     ],
     "buffs": [
-      {
-        "name": "Lord of the Host",
-        "affects": {
-          "traits": [
-            "Rapid Assault",
-            "Flying"
-          ]
-        },
-        "effect": {
-          "damage": {
-            "8": "22",
-            "17": "49",
-            "26": "122",
-            "35": "256",
-            "50": "898",
-            "55": "1072"
-          },
-            "hits": {
-                "0-100": "1"
+        {
+            "name": "Lord of the Host",
+            "affects": {
+                "traits": [
+                    "Rapid Assault",
+                    "Flying"
+                ]
             },
-            "restriction": "melee"
-        },
-        "comment": "Affected units at or below 50% health score +1 hits with melee attacks"
+            "effect": {
+                "damage": {
+                    "8": "22",
+                    "17": "49",
+                    "26": "122",
+                    "35": "256",
+                    "50": "898",
+                    "55": "1072"
+                },
+                "hits": {
+                    "0-100": "1"
+                },
+                "restriction": "melee"
+            },
+            "comment": "Affected units at or below 50% health score +1 hits with melee attacks"
       }
     ],
     "grand_alliance": "Imperial",

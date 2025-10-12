@@ -589,16 +589,31 @@ function renderSynergyGraph() {
         layout: {
             name: 'breadthfirst',
             directed: true,
-            spacingFactor: 1.5,
+            spacingFactor: 1.3,
             avoidOverlap: true,
             nodeDimensionsIncludeLabels: true,
             animate: true,
-            animationDuration: 500
+            animationDuration: 500,
+            align: 'UL'
         },
         userZoomingEnabled: false,
         userPanningEnabled: true,
-        boxSelectionEnabled: false
+        boxSelectionEnabled: false,
+        zoom: 1,
+        pan: { x: 0, y: 0 },
+        minZoom: 1,
+        maxZoom: 1
     });
+    
+    // Set fixed zoom level and position graph to the left
+    cy.zoom(1);
+    
+    // Pan to left side of container
+    setTimeout(() => {
+        const extent = cy.elements().boundingBox();
+        cy.pan({ x: -extent.x1 + 50, y: -extent.y1 + 50 });
+        updateNodeImageOverlays();
+    }, 600);
     
     // Add tooltips on hover
     cy.on('mouseover', 'node', function(event) {
@@ -670,6 +685,12 @@ function updateNodeImageOverlays() {
         
         // Add buff table if this character receives buffs
         if (charIndex !== undefined && characterBuffsData[charIndex] && characterBuffsData[charIndex].length > 0) {
+            const char = selectedCharacters[charIndex];
+            const hasMelee = char.stats && char.stats.melee !== undefined;
+            const hasRange = char.stats && char.stats.range !== undefined;
+            const meleeHits = hasMelee ? char.stats.melee : null;
+            const rangeHits = hasRange ? char.stats.range : null;
+            
             const buffTable = document.createElement('div');
             buffTable.style.marginTop = '8px';
             buffTable.style.background = 'rgba(0, 0, 0, 0.9)';
@@ -682,23 +703,115 @@ function updateNodeImageOverlays() {
             buffTable.style.whiteSpace = 'nowrap';
             
             let tableHTML = '<table style="width: 100%; border-collapse: collapse;">';
-            tableHTML += '<tr style="border-bottom: 1px solid #444;"><th style="text-align: left; padding: 5px; font-size: 13px;">Buff</th><th style="text-align: right; padding: 5px; font-size: 13px;">Dmg@37</th></tr>';
+            tableHTML += '<tr style="border-bottom: 1px solid #444;">';
+            tableHTML += '<th style="text-align: left; padding: 5px; font-size: 13px;">Buff</th>';
+            if (hasMelee) {
+                tableHTML += '<th style="text-align: center; padding: 5px; font-size: 13px;">M</th>';
+            }
+            if (hasRange) {
+                tableHTML += '<th style="text-align: center; padding: 5px; font-size: 13px;">R</th>';
+            }
+            tableHTML += '<th style="text-align: right; padding: 5px; font-size: 13px;">Dmg@37</th>';
+            if (hasMelee) {
+                tableHTML += '<th style="text-align: right; padding: 5px; font-size: 13px;">Buffed M</th>';
+            }
+            if (hasRange) {
+                tableHTML += '<th style="text-align: right; padding: 5px; font-size: 13px;">Buffed R</th>';
+            }
+            tableHTML += '</tr>';
+            
+            let totalDamage = 0;
+            let totalBonus = 0;
+            let totalBuffedMelee = 0;
+            let totalBuffedRange = 0;
+            let totalBuffedBonusMelee = 0;
+            let totalBuffedBonusRange = 0;
             
             characterBuffsData[charIndex].forEach(buffInfo => {
                 if (buffInfo.effect && buffInfo.effect.damage) {
                     const damageValue = interpolateBuffValue(buffInfo.effect.damage, BUFF_LEVEL);
                     if (damageValue !== null) {
-                        tableHTML += `<tr><td style="padding: 5px; font-size: 12px;">${buffInfo.buffName}</td><td style="text-align: right; padding: 5px; font-size: 13px; font-weight: bold; color: #ff6b6b;">${damageValue}</td></tr>`;
+                        totalDamage += damageValue;
+                        const buffedMelee = hasMelee ? meleeHits * damageValue : 0;
+                        const buffedRange = hasRange ? rangeHits * damageValue : 0;
+                        totalBuffedMelee += buffedMelee;
+                        totalBuffedRange += buffedRange;
+                        
+                        tableHTML += '<tr>';
+                        tableHTML += `<td style="padding: 5px; font-size: 12px;">${buffInfo.buffName}</td>`;
+                        if (hasMelee) {
+                            tableHTML += `<td style="text-align: center; padding: 5px; font-size: 12px; color: #ffa500;">${meleeHits}</td>`;
+                        }
+                        if (hasRange) {
+                            tableHTML += `<td style="text-align: center; padding: 5px; font-size: 12px; color: #00bfff;">${rangeHits}</td>`;
+                        }
+                        tableHTML += `<td style="text-align: right; padding: 5px; font-size: 13px; font-weight: bold; color: #ff6b6b;">${damageValue}</td>`;
+                        if (hasMelee) {
+                            tableHTML += `<td style="text-align: right; padding: 5px; font-size: 13px; font-weight: bold; color: #ffb366;">${buffedMelee}</td>`;
+                        }
+                        if (hasRange) {
+                            tableHTML += `<td style="text-align: right; padding: 5px; font-size: 13px; font-weight: bold; color: #66d9ff;">${buffedRange}</td>`;
+                        }
+                        tableHTML += '</tr>';
                     }
                 }
                 // Check for damage_bonus
                 if (buffInfo.effect && buffInfo.effect.damage_bonus) {
                     const bonusValue = interpolateBuffValue(buffInfo.effect.damage_bonus, BUFF_LEVEL);
                     if (bonusValue !== null) {
-                        tableHTML += `<tr><td style="padding: 5px; font-size: 12px;">${buffInfo.buffName}+</td><td style="text-align: right; padding: 5px; font-size: 13px; font-weight: bold; color: #6bff6b;">${bonusValue}</td></tr>`;
+                        totalBonus += bonusValue;
+                        const buffedMelee = hasMelee ? meleeHits * bonusValue : 0;
+                        const buffedRange = hasRange ? rangeHits * bonusValue : 0;
+                        totalBuffedBonusMelee += buffedMelee;
+                        totalBuffedBonusRange += buffedRange;
+                        
+                        tableHTML += '<tr>';
+                        tableHTML += `<td style="padding: 5px; font-size: 12px;">${buffInfo.buffName}+</td>`;
+                        if (hasMelee) {
+                            tableHTML += `<td style="text-align: center; padding: 5px; font-size: 12px; color: #ffa500;">${meleeHits}</td>`;
+                        }
+                        if (hasRange) {
+                            tableHTML += `<td style="text-align: center; padding: 5px; font-size: 12px; color: #00bfff;">${rangeHits}</td>`;
+                        }
+                        tableHTML += `<td style="text-align: right; padding: 5px; font-size: 13px; font-weight: bold; color: #6bff6b;">${bonusValue}</td>`;
+                        if (hasMelee) {
+                            tableHTML += `<td style="text-align: right; padding: 5px; font-size: 13px; font-weight: bold; color: #8fff8f;">${buffedMelee}</td>`;
+                        }
+                        if (hasRange) {
+                            tableHTML += `<td style="text-align: right; padding: 5px; font-size: 13px; font-weight: bold; color: #8fff8f;">${buffedRange}</td>`;
+                        }
+                        tableHTML += '</tr>';
                     }
                 }
             });
+            
+            // Add summary row
+            if (totalDamage > 0 || totalBonus > 0) {
+                tableHTML += '<tr style="border-top: 2px solid #d4af37;">';
+                tableHTML += '<td style="padding: 5px; font-size: 13px; font-weight: bold; color: #d4af37;">Total</td>';
+                if (hasMelee) {
+                    tableHTML += `<td style="text-align: center; padding: 5px; font-size: 12px; color: #ffa500;">${meleeHits}</td>`;
+                }
+                if (hasRange) {
+                    tableHTML += `<td style="text-align: center; padding: 5px; font-size: 12px; color: #00bfff;">${rangeHits}</td>`;
+                }
+                tableHTML += '<td style="text-align: right; padding: 5px; font-size: 14px; font-weight: bold; color: #ffd700;">';
+                if (totalDamage > 0 && totalBonus > 0) {
+                    tableHTML += `${totalDamage} + ${totalBonus}`;
+                } else if (totalDamage > 0) {
+                    tableHTML += `${totalDamage}`;
+                } else {
+                    tableHTML += `${totalBonus}`;
+                }
+                tableHTML += '</td>';
+                if (hasMelee) {
+                    tableHTML += `<td style="text-align: right; padding: 5px; font-size: 14px; font-weight: bold; color: #ffd700;">${totalBuffedMelee} + ${totalBuffedBonusMelee}</td>`;
+                }
+                if (hasRange) {
+                    tableHTML += `<td style="text-align: right; padding: 5px; font-size: 14px; font-weight: bold; color: #ffd700;">${totalBuffedRange} + ${totalBuffedBonusRange}</td>`;
+                }
+                tableHTML += '</tr>';
+            }
             
             tableHTML += '</table>';
             buffTable.innerHTML = tableHTML;
