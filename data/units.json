@@ -210,6 +210,44 @@
         "type": "Block Booster"
       }
     ],
+    "buffs": [
+        {
+            "name": "Path of Command",
+            "affects": {
+                "grand_alliance": [
+                    "*"
+                ]
+            },
+            "effect": {
+                "damage": {
+                    "8": "10",
+                    "17": "22",
+                    "26": "55",
+                    "35": "114",
+                    "50": "400",
+                    "55": "476"
+                }
+            }
+        },
+        {
+            "name": "Path of Command",
+            "affects": {
+                "faction": [
+                    "Aeldari"
+                    ]
+            },
+            "effect": {
+                "damage": {
+                    "8": "17",
+                    "17": "39",
+                    "26": "96",
+                    "35": "209",
+                    "50": "699",
+                    "55": "834"
+                }
+            }
+        }
+    ],
     "grand_alliance": "Xenos",
     "row_number": 6
   },
@@ -256,7 +294,12 @@
         },
         "effect": {
           "damage": {
-            "34": "274"
+              "8": "22",
+              "17": "49",
+              "26": "122",
+              "35": "256",
+              "50": "898",
+              "55": "1072"
           }
         },
         "omit": "non-normal"
@@ -270,7 +313,12 @@
         },
         "effect": {
           "damage": {
-            "34": "365"
+              "8": "29",
+              "17": "66",
+              "26": "163",
+              "35": "341",
+              "50": "1197",
+              "55": "1428"
           }
         },
         "omit": "non-normal"
@@ -510,6 +558,26 @@
         "type": "Crit Booster"
       }
     ],
+    "buffs": [
+        {
+            "name": "Spotter",
+            "affects": {
+                "traits": [
+                    "Heavy Weapon"
+                ]
+            },
+            "effect": {
+                "damage": {
+                    "8": "20",
+                    "17": "43",
+                    "26": "108",
+                    "35": "229",
+                    "50": "797",
+                    "55": "952"
+                }
+            }
+      }
+    ],
     "grand_alliance": "Imperial",
     "row_number": 14
   },
@@ -645,7 +713,7 @@
               "55": "2156"
             }
         },
-        "comment": "Deals 47 extra damage for each attack Abaddon has made"
+        "comment": "Deals X extra damage for each attack Abaddon has made"
       }
     ],
     "row_number": 17
@@ -859,6 +927,29 @@
         "type": "Crit Booster"
       }
     ],
+    "buffs": [
+        {
+            "name": "Astartes Banner",
+            "affects": {
+                "grand_alliance": [
+                    "*"
+                ]
+            },
+            "effect": {
+                "damage": {
+                    "8": "187",
+                    "17": "410",
+                    "26": "1011",
+                    "35": "2139",
+                    "50": "7477",
+                    "55": "8926"
+                },
+                "restriction": "melee",
+                "single_hit": true
+            },
+            "comment": "Unit scores one additional hit with maximum of X damage"
+        }
+    ],
     "grand_alliance": "Imperial",
     "row_number": 23
   },
@@ -925,6 +1016,46 @@
       {
         "slot": "Slot 3",
         "type": "Block Booster"
+      }
+    ],
+    "buffs": [
+      {
+        "name": "Destroy the Witch",
+        "affects": {
+          "grand_alliance": [
+            "*"
+          ]
+        },
+        "effect": {
+          "damage": {
+              "8": "37",
+              "17": "82",
+              "26": "202",
+              "35": "427",
+              "50": "1496",
+              "55": "1786"
+          }
+        },
+          "comment": "Only against Psykers, gains +1 in movement"
+      },
+      {
+        "name": "Crusade of Wrath",
+        "affects": {
+          "grand_alliance": [
+            "*"
+          ]
+        },
+        "effect": {
+          "damage_bonus": {
+              "8": "12",
+              "17": "28",
+              "26": "67",
+              "35": "142",
+              "50": "499",
+              "55": "596"
+          }
+        },
+          "comment": "Active ability, valid for two rounds"
       }
     ],
     "grand_alliance": "Imperial",
@@ -1330,6 +1461,27 @@
         "type": "Block Booster"
       }
     ],
+    "buffs": [
+      {
+        "name": "Stand Vigil",
+        "affects": {
+          "grand_alliance": [
+            "*"
+          ]
+        },
+        "effect": {
+          "damage_percent": {
+              "8": "20",
+              "17": "21",
+              "26": "22",
+              "35": "23",
+              "50": "25",
+              "55": "25"
+          }
+        },
+        "omit": "normal"
+      }
+    ],
     "grand_alliance": "Imperial",
     "row_number": 35
   },
@@ -1605,6 +1757,47 @@
         "type": "Crit Booster"
       }
     ],
+    "buffs": [
+        {
+            "name": "Explosive Maladies",
+            "affects": {
+                "grand_alliance": [
+                    "*"
+                ]
+            },
+            "effect": {
+                "damage": {
+                    "8": "75",
+                    "17": "164",
+                    "26": "405",
+                    "35": "856",
+                    "50": "2992",
+                    "55": "3570"
+                },
+                "restriction": "ranged",
+                "single_hit": true
+            }
+        },
+        {
+            "name": "Explosivee Maladies",
+            "affects": {
+                "grand_alliance": [
+                    "Chaos"
+                ]
+            },
+            "effect": {
+                "damage": {
+                    "8": "75",
+                    "17": "164",
+                    "26": "405",
+                    "35": "856",
+                    "50": "2992",
+                    "55": "3570"
+                },
+                "single_hit": true
+            }
+        }
+    ],
     "grand_alliance": "Chaos",
     "row_number": 43
   },
@@ -1711,6 +1904,27 @@
         "type": "Crit Booster"
       }
     ],
+    "buffs": [
+      {
+        "name": "Obsessive Annunciation",
+        "affects": {
+            "grand_alliance": [
+            "*"
+          ]
+        },
+        "effect": {
+          "damage": {
+              "8": "27",
+              "17": "60",
+              "26": "148",
+              "35": "314",
+              "50": "1096",
+              "55": "1310"
+          },
+            "restriction": "ranged"
+        }
+      }
+    ],
     "grand_alliance": "Chaos",
     "row_number": 46
   },
@@ -1811,6 +2025,26 @@
       {
         "slot": "Slot 3",
         "type": "Crit Booster"
+      }
+    ],
+    "buffs": [
+      {
+        "name": "Twisted Science",
+        "affects": {
+          "faction": [
+            "Genestealers"
+          ]
+        },
+        "effect": {
+          "damage": {
+              "8": "12",
+              "17": "28",
+              "26": "67",
+              "35": "142",
+              "50": "499",
+              "55": "596"
+          }
+        }
       }
     ],
     "grand_alliance": "Xenos",
@@ -2758,6 +2992,27 @@
         "type": "Crit Booster"
       }
     ],
+    "buffs": [
+        {
+            "name": "Structural Analyser",
+            "affects": {
+                "grand_alliance": [
+                    "*"
+                ]
+            },
+            "effect": {
+                "damage": {
+                    "8": "25",
+                    "17": "55",
+                    "26": "134",
+                    "35": "285",
+                    "50": "997",
+                    "55": "1190"
+                },
+                "restriction": "ranged"
+            }
+        }
+    ],
     "grand_alliance": "Xenos",
     "row_number": 76
   },
@@ -2833,6 +3088,27 @@
         "type": "Crit Booster"
       }
     ],
+    "buffs": [
+        {
+            "name": "Defender of the Greater Good",
+            "affects": {
+                "grand_alliance": [
+                    "*"
+                ]
+            },
+            "effect": {
+                "damage": {
+                    "8": "12",
+                    "17": "28",
+                    "26": "67",
+                    "35": "142",
+                    "50": "499",
+                    "55": "596"
+                },
+                "restriction": "ranged"
+            }
+        }
+    ],
     "grand_alliance": "Xenos",
     "row_number": 78
   },
@@ -2867,6 +3143,57 @@
       {
         "slot": "Slot 3",
         "type": "Crit Booster"
+      }
+    ],
+    "buffs": [
+      {
+        "name": "Psychic Stalk",
+        "affects": {
+            "damage_types": [
+                "Flame",
+                "Psychic"
+            ]
+        },
+        "effect": {
+          "damage_percent": {
+              "8": "22",
+              "17": "49",
+              "26": "122",
+              "35": "256",
+              "50": "898",
+              "55": "1072"
+          }
+        }
+      },
+      {
+        "name": "Psychic Stalk",
+        "affects": {
+          "grand_alliance": [
+            "Chaos"
+          ],
+            "damage_types": [
+                "Flame",
+                "Psychic"
+            ]
+        },
+        "effect": {
+          "damage_percent": {
+              "8": "25",
+              "17": "27",
+              "26": "29",
+              "35": "31",
+              "50": "33",
+              "55": "33"
+          },
+            "damage": {
+              "8": "12",
+              "17": "28",
+              "26": "67",
+              "35": "142",
+              "50": "499",
+              "55": "596"
+            }
+        }
       }
     ],
     "grand_alliance": "Chaos",
@@ -2905,8 +3232,36 @@
         "type": "Crit Booster"
       }
     ],
-    "grand_alliance": "Chaos",
-    "row_number": 80
+      "buffs": [
+          {
+              "name": "Infernal Pacts",
+              "affects": {
+                  "grand_alliance": [
+                      "*"
+                  ]
+              },
+              "effect": {
+                  "damage": {
+                      "8": "38",
+                      "17": "82",
+                      "26": "202",
+                      "35": "428",
+                      "50": "1497",
+                      "55": "1785"
+                  },
+                  "restriction": "ranged",
+                  "single_hit": true,
+                  "extra_hit": {
+                      "traits": [
+                          "Daemon"
+                      ]
+                  }
+              },
+              "comment": "Normal ranged attacks deal one extra Psychic damage"
+          }
+      ],
+      "grand_alliance": "Chaos",
+      "row_number": 80
   },
   {
     "name": "Thaumachus",
@@ -3431,6 +3786,28 @@
       {
         "slot": "Slot 3",
         "type": "Crit Booster"
+      }
+    ],
+    "buffs": [
+      {
+        "name": "Beacon of Rage",
+        "affects": {
+          "grand_alliance": [
+            "Chaos"
+          ]
+        },
+        "effect": {
+          "damage": {
+              "8": "4",
+              "17": "12",
+              "26": "22",
+              "35": "45",
+              "50": "300",
+              "55": "305"
+          },
+            "restriction": "melee"
+        },
+          "comment": "Buffed damage is multiplied for each time Azkor was attacked"
       }
     ],
     "grand_alliance": "Chaos",

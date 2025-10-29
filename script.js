@@ -456,6 +456,7 @@ function renderSynergyGraph() {
             const affectsGrandAlliance = buff.affects.grand_alliance || [];
             const affectsFaction = buff.affects.faction || [];
             const affectsTraits = buff.affects.traits || [];
+            const affectsDamageTypes = buff.affects.damage_types || [];
             
             selectedCharacters.forEach((targetChar, targetIndex) => {
                 if (sourceIndex === targetIndex) return; // Don't draw arrow to self
@@ -482,6 +483,15 @@ function renderSynergyGraph() {
                         targetChar.traits.includes(trait)
                     );
                     if (hasMatchingTrait) {
+                        matches = true;
+                    }
+                }
+                // Check damage type match - target must have at least one of the damage types
+                else if (affectsDamageTypes.length > 0 && targetChar.damage_types) {
+                    const hasMatchingDamageType = affectsDamageTypes.some(damageType => 
+                        targetChar.damage_types.includes(damageType)
+                    );
+                    if (hasMatchingDamageType) {
                         matches = true;
                     }
                 }
@@ -731,56 +741,86 @@ function updateNodeImageOverlays() {
                 if (buffInfo.effect && buffInfo.effect.damage) {
                     const damageValue = interpolateBuffValue(buffInfo.effect.damage, BUFF_LEVEL);
                     if (damageValue !== null) {
-                        totalDamage += damageValue;
-                        const buffedMelee = hasMelee ? meleeHits * damageValue : 0;
-                        const buffedRange = hasRange ? rangeHits * damageValue : 0;
-                        totalBuffedMelee += buffedMelee;
-                        totalBuffedRange += buffedRange;
+                        const restriction = buffInfo.effect.restriction; // 'melee', 'ranged', or undefined
+                        const isSingleHit = buffInfo.effect.single_hit === true;
                         
-                        tableHTML += '<tr>';
-                        tableHTML += `<td style="padding: 5px; font-size: 12px;">${buffInfo.buffName}</td>`;
-                        if (hasMelee) {
-                            tableHTML += `<td style="text-align: center; padding: 5px; font-size: 12px; color: #ffa500;">${meleeHits}</td>`;
+                        // Calculate buffed damage based on restriction
+                        let buffedMelee = 0;
+                        let buffedRange = 0;
+                        
+                        if (hasMelee && restriction !== 'ranged') {
+                            buffedMelee = isSingleHit ? damageValue : meleeHits * damageValue;
                         }
-                        if (hasRange) {
-                            tableHTML += `<td style="text-align: center; padding: 5px; font-size: 12px; color: #00bfff;">${rangeHits}</td>`;
+                        if (hasRange && restriction !== 'melee') {
+                            buffedRange = isSingleHit ? damageValue : rangeHits * damageValue;
                         }
-                        tableHTML += `<td style="text-align: right; padding: 5px; font-size: 13px; font-weight: bold; color: #ff6b6b;">${damageValue}</td>`;
-                        if (hasMelee) {
-                            tableHTML += `<td style="text-align: right; padding: 5px; font-size: 13px; font-weight: bold; color: #ffb366;">${buffedMelee}</td>`;
+                        
+                        // Only add to totals and render if at least one value is non-zero
+                        if (buffedMelee > 0 || buffedRange > 0) {
+                            totalDamage += damageValue;
+                            totalBuffedMelee += buffedMelee;
+                            totalBuffedRange += buffedRange;
+                            
+                            tableHTML += '<tr>';
+                            tableHTML += `<td style="padding: 5px; font-size: 12px;">${buffInfo.buffName}</td>`;
+                            if (hasMelee) {
+                                tableHTML += `<td style="text-align: center; padding: 5px; font-size: 12px; color: #ffa500;">${meleeHits}</td>`;
+                            }
+                            if (hasRange) {
+                                tableHTML += `<td style="text-align: center; padding: 5px; font-size: 12px; color: #00bfff;">${rangeHits}</td>`;
+                            }
+                            tableHTML += `<td style="text-align: right; padding: 5px; font-size: 13px; font-weight: bold; color: #ff6b6b;">${damageValue}</td>`;
+                            if (hasMelee) {
+                                tableHTML += `<td style="text-align: right; padding: 5px; font-size: 13px; font-weight: bold; color: #ffb366;">${buffedMelee}</td>`;
+                            }
+                            if (hasRange) {
+                                tableHTML += `<td style="text-align: right; padding: 5px; font-size: 13px; font-weight: bold; color: #66d9ff;">${buffedRange}</td>`;
+                            }
+                            tableHTML += '</tr>';
                         }
-                        if (hasRange) {
-                            tableHTML += `<td style="text-align: right; padding: 5px; font-size: 13px; font-weight: bold; color: #66d9ff;">${buffedRange}</td>`;
-                        }
-                        tableHTML += '</tr>';
                     }
                 }
                 // Check for damage_bonus
                 if (buffInfo.effect && buffInfo.effect.damage_bonus) {
                     const bonusValue = interpolateBuffValue(buffInfo.effect.damage_bonus, BUFF_LEVEL);
                     if (bonusValue !== null) {
-                        totalBonus += bonusValue;
-                        const buffedMelee = hasMelee ? meleeHits * bonusValue : 0;
-                        const buffedRange = hasRange ? rangeHits * bonusValue : 0;
-                        totalBuffedBonusMelee += buffedMelee;
-                        totalBuffedBonusRange += buffedRange;
+                        const restriction = buffInfo.effect.restriction; // 'melee', 'ranged', or undefined
+                        const isSingleHit = buffInfo.effect.single_hit === true;
                         
-                        tableHTML += '<tr>';
-                        tableHTML += `<td style="padding: 5px; font-size: 12px;">${buffInfo.buffName}+</td>`;
-                        if (hasMelee) {
-                            tableHTML += `<td style="text-align: center; padding: 5px; font-size: 12px; color: #ffa500;">${meleeHits}</td>`;
+                        // Calculate buffed damage based on restriction
+                        let buffedMelee = 0;
+                        let buffedRange = 0;
+                        
+                        if (hasMelee && restriction !== 'ranged') {
+                            buffedMelee = isSingleHit ? bonusValue : meleeHits * bonusValue;
                         }
-                        if (hasRange) {
-                            tableHTML += `<td style="text-align: center; padding: 5px; font-size: 12px; color: #00bfff;">${rangeHits}</td>`;
+                        if (hasRange && restriction !== 'melee') {
+                            buffedRange = isSingleHit ? bonusValue : rangeHits * bonusValue;
                         }
-                        tableHTML += `<td style="text-align: right; padding: 5px; font-size: 13px; font-weight: bold; color: #6bff6b;">${bonusValue}</td>`;
-                        if (hasMelee) {
-                            tableHTML += `<td style="text-align: right; padding: 5px; font-size: 13px; font-weight: bold; color: #8fff8f;">${buffedMelee}</td>`;
+                        
+                        // Only add to totals and render if at least one value is non-zero
+                        if (buffedMelee > 0 || buffedRange > 0) {
+                            totalBonus += bonusValue;
+                            totalBuffedBonusMelee += buffedMelee;
+                            totalBuffedBonusRange += buffedRange;
+                            
+                            tableHTML += '<tr>';
+                            tableHTML += `<td style="padding: 5px; font-size: 12px;">${buffInfo.buffName}+</td>`;
+                            if (hasMelee) {
+                                tableHTML += `<td style="text-align: center; padding: 5px; font-size: 12px; color: #ffa500;">${meleeHits}</td>`;
+                            }
+                            if (hasRange) {
+                                tableHTML += `<td style="text-align: center; padding: 5px; font-size: 12px; color: #00bfff;">${rangeHits}</td>`;
+                            }
+                            tableHTML += `<td style="text-align: right; padding: 5px; font-size: 13px; font-weight: bold; color: #6bff6b;">${bonusValue}</td>`;
+                            if (hasMelee) {
+                                tableHTML += `<td style="text-align: right; padding: 5px; font-size: 13px; font-weight: bold; color: #8fff8f;">${buffedMelee}</td>`;
+                            }
+                            if (hasRange) {
+                                tableHTML += `<td style="text-align: right; padding: 5px; font-size: 13px; font-weight: bold; color: #8fff8f;">${buffedRange}</td>`;
+                            }
+                            tableHTML += '</tr>';
                         }
-                        if (hasRange) {
-                            tableHTML += `<td style="text-align: right; padding: 5px; font-size: 13px; font-weight: bold; color: #8fff8f;">${buffedRange}</td>`;
-                        }
-                        tableHTML += '</tr>';
                     }
                 }
             });
