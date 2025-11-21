@@ -19,7 +19,7 @@ async function loadCharacters() {
         }
         charactersData = await response.json();
         filteredData = [...charactersData];
-        
+
         document.getElementById('loading').style.display = 'none';
         populateTraitFilter();
         populateDamageTypeFilter();
@@ -37,10 +37,10 @@ async function loadCharacters() {
 function renderTable(data) {
     const tbody = document.getElementById('tableBody');
     tbody.innerHTML = '';
-    
+
     data.forEach(character => {
         const row = document.createElement('tr');
-        
+
         // Select button cell
         const selectCell = document.createElement('td');
         selectCell.style.textAlign = 'center';
@@ -48,7 +48,7 @@ function renderTable(data) {
         selectBtn.className = 'select-btn';
         const isSelected = selectedCharacters.some(c => c.name === character.name);
         const isMaxReached = selectedCharacters.length >= MAX_SQUAD_SIZE;
-        
+
         if (isSelected) {
             selectBtn.textContent = 'Selected';
             selectBtn.classList.add('selected');
@@ -58,11 +58,11 @@ function renderTable(data) {
                 selectBtn.disabled = true;
             }
         }
-        
+
         selectBtn.addEventListener('click', () => toggleCharacterSelection(character));
         selectCell.appendChild(selectBtn);
         row.appendChild(selectCell);
-        
+
         const portraitCell = document.createElement('td');
         const portraitAlliance = character.grand_alliance || 'None';
         portraitCell.className = `portrait-cell portrait-${portraitAlliance.toLowerCase().replace(/\s+/g, '-')}`;
@@ -75,17 +75,17 @@ function renderTable(data) {
         };
         portraitCell.appendChild(img);
         row.appendChild(portraitCell);
-        
+
         const nameCell = document.createElement('td');
         nameCell.className = 'name-cell';
         nameCell.textContent = character.name || 'Unknown';
         row.appendChild(nameCell);
-        
+
         const factionCell = document.createElement('td');
         factionCell.className = 'faction-cell';
         factionCell.textContent = character.faction || 'Unknown';
         row.appendChild(factionCell);
-        
+
         const damageCell = document.createElement('td');
         const damageTypesDiv = document.createElement('div');
         damageTypesDiv.className = 'damage-types';
@@ -99,7 +99,7 @@ function renderTable(data) {
         }
         damageCell.appendChild(damageTypesDiv);
         row.appendChild(damageCell);
-        
+
         const traitsCell = document.createElement('td');
         const traitsDiv = document.createElement('div');
         traitsDiv.className = 'traits';
@@ -113,7 +113,7 @@ function renderTable(data) {
         }
         traitsCell.appendChild(traitsDiv);
         row.appendChild(traitsCell);
-        
+
         const statsCell = document.createElement('td');
         const statsGrid = document.createElement('div');
         statsGrid.className = 'stats-grid';
@@ -134,7 +134,7 @@ function renderTable(data) {
         }
         statsCell.appendChild(statsGrid);
         row.appendChild(statsCell);
-        
+
         const allianceCell = document.createElement('td');
         const alliance = character.grand_alliance || 'None';
         const allianceSpan = document.createElement('span');
@@ -142,7 +142,7 @@ function renderTable(data) {
         allianceSpan.textContent = alliance;
         allianceCell.appendChild(allianceSpan);
         row.appendChild(allianceCell);
-        
+
         tbody.appendChild(row);
     });
 }
@@ -205,22 +205,22 @@ function setupFilterHandlers() {
     const damageTypeFilter = document.getElementById('damageTypeFilter');
     const searchBox = document.getElementById('searchBox');
     const clearButton = document.getElementById('clearFilters');
-    
+
     traitFilter.addEventListener('change', function() {
         selectedTrait = this.value;
         applyFilters();
     });
-    
+
     damageTypeFilter.addEventListener('change', function() {
         selectedDamageType = this.value;
         applyFilters();
     });
-    
+
     searchBox.addEventListener('input', function() {
         searchQuery = this.value.toLowerCase();
         applyFilters();
     });
-    
+
     clearButton.addEventListener('click', function() {
         traitFilter.value = '';
         damageTypeFilter.value = '';
@@ -239,30 +239,30 @@ function applyFilters() {
             const name = (character.name || '').toLowerCase();
             const faction = (character.faction || '').toLowerCase();
             const alliance = (character.grand_alliance || '').toLowerCase();
-            
-            const matchesSearch = name.startsWith(searchQuery) || 
-                                  faction.startsWith(searchQuery) || 
+
+            const matchesSearch = name.startsWith(searchQuery) ||
+                                  faction.startsWith(searchQuery) ||
                                   alliance.startsWith(searchQuery);
-            
+
             if (!matchesSearch) {
                 return false;
             }
         }
-        
+
         // Filter by trait
         if (selectedTrait) {
             if (!character.traits || !character.traits.includes(selectedTrait)) {
                 return false;
             }
         }
-        
+
         // Filter by damage type
         if (selectedDamageType) {
             if (!character.damage_types || !character.damage_types.includes(selectedDamageType)) {
                 return false;
             }
         }
-        
+
         return true;
     });
     updateFilterInfo();
@@ -275,19 +275,19 @@ function applyFilters() {
 function updateFilterInfo() {
     const filterInfo = document.getElementById('filterInfo');
     const filters = [];
-    
+
     if (searchQuery) {
         filters.push(`search "${searchQuery}"`);
     }
-    
+
     if (selectedTrait) {
         filters.push(`trait "${selectedTrait}"`);
     }
-    
+
     if (selectedDamageType) {
         filters.push(`damage type "${selectedDamageType}"`);
     }
-    
+
     if (filters.length > 0) {
         filterInfo.innerHTML = `<strong>Active Filter:</strong> Showing ${filteredData.length} character(s) with ${filters.join(' and ')}`;
         filterInfo.classList.add('active');
@@ -313,7 +313,7 @@ function sortData(column, direction) {
 // Squad management functions
 function toggleCharacterSelection(character) {
     const index = selectedCharacters.findIndex(c => c.name === character.name);
-    
+
     if (index > -1) {
         // Remove character
         selectedCharacters.splice(index, 1);
@@ -323,7 +323,7 @@ function toggleCharacterSelection(character) {
             selectedCharacters.push(character);
         }
     }
-    
+
     updateSelectedSquadDisplay();
     renderTable(filteredData); // Re-render to update button states
 }
@@ -342,26 +342,26 @@ function updateSelectedSquadDisplay() {
     const squadCountSpan = document.getElementById('squadCount');
     const clearButton = document.getElementById('clearSquad');
     const synergySection = document.getElementById('synergyGraphSection');
-    
+
     squadCountSpan.textContent = `(${selectedCharacters.length}/${MAX_SQUAD_SIZE})`;
-    
+
     if (selectedCharacters.length === 0) {
         container.innerHTML = '<p class="empty-squad-message">Select up to 5 characters to build your squad</p>';
         clearButton.style.display = 'none';
         synergySection.style.display = 'none';
         return;
     }
-    
+
     clearButton.style.display = 'block';
     synergySection.style.display = 'block';
-    
+
     container.innerHTML = selectedCharacters.map(char => `
         <div class="selected-character-card ${getAllianceClass(char.grand_alliance)}">
             <button class="remove-btn" onclick="toggleCharacterSelection(${JSON.stringify(char).replace(/"/g, '&quot;')})">×</button>
             <img src="${char.portrait_url}" alt="${char.name}" class="selected-character-image" title="${char.name} (${char.faction})">
         </div>
     `).join('');
-    
+
     renderSynergyGraph();
 }
 
@@ -371,19 +371,19 @@ const BUFF_LEVEL = 37; // Hardcoded level for buff calculations
 // Function to interpolate buff values at a specific level
 function interpolateBuffValue(damageMap, level) {
     if (!damageMap || typeof damageMap !== 'object') return null;
-    
+
     // Convert keys to numbers and sort
     const levels = Object.keys(damageMap).map(Number).sort((a, b) => a - b);
-    
+
     // Exact match
     if (damageMap[level.toString()]) {
         return parseInt(damageMap[level.toString()]);
     }
-    
+
     // Find surrounding levels for interpolation
     let lowerLevel = null;
     let upperLevel = null;
-    
+
     for (let i = 0; i < levels.length; i++) {
         if (levels[i] < level) {
             lowerLevel = levels[i];
@@ -393,17 +393,17 @@ function interpolateBuffValue(damageMap, level) {
             break;
         }
     }
-    
+
     // If level is below all keys, return lowest value
     if (lowerLevel === null && upperLevel !== null) {
         return parseInt(damageMap[upperLevel.toString()]);
     }
-    
+
     // If level is above all keys, return highest value
     if (upperLevel === null && lowerLevel !== null) {
         return parseInt(damageMap[lowerLevel.toString()]);
     }
-    
+
     // Linear interpolation
     if (lowerLevel !== null && upperLevel !== null) {
         const lowerValue = parseInt(damageMap[lowerLevel.toString()]);
@@ -411,29 +411,29 @@ function interpolateBuffValue(damageMap, level) {
         const ratio = (level - lowerLevel) / (upperLevel - lowerLevel);
         return Math.round(lowerValue + (upperValue - lowerValue) * ratio);
     }
-    
+
     return null;
 }
 
 function renderSynergyGraph() {
     const container = document.getElementById('synergyGraph');
-    
+
     // Clear and create Cytoscape container with overlay for images
     container.innerHTML = '<div id="cy"></div><div id="node-overlays"></div>';
-    
+
     // Build nodes and edges for Cytoscape
     const elements = [];
-    
+
     // Track buffs affecting each character
     const characterBuffs = selectedCharacters.map(() => []);
-    
+
     // Add nodes
     selectedCharacters.forEach((char, index) => {
         const allianceColor = getAllianceColorForGraph(char.grand_alliance);
         console.log(`Node ${index}: ${char.name}, Portrait URL: ${char.portrait_url}`);
         elements.push({
-            data: { 
-                id: `node-${index}`, 
+            data: {
+                id: `node-${index}`,
                 label: char.name,
                 faction: char.faction,
                 alliance: char.grand_alliance,
@@ -443,108 +443,136 @@ function renderSynergyGraph() {
             }
         });
     });
-    
+
     // Add edges (arrows) based on buffs
     selectedCharacters.forEach((sourceChar, sourceIndex) => {
         if (!sourceChar.buffs || sourceChar.buffs.length === 0) {
             return;
         }
-        
-        sourceChar.buffs.forEach(buff => {
-            if (!buff.affects) return;
-            
-            const affectsGrandAlliance = buff.affects.grand_alliance || [];
-            const affectsFaction = buff.affects.faction || [];
-            const affectsTraits = buff.affects.traits || [];
-            const affectsDamageTypes = buff.affects.damage_types || [];
-            
-            selectedCharacters.forEach((targetChar, targetIndex) => {
-                if (sourceIndex === targetIndex) return; // Don't draw arrow to self
-                
+
+        selectedCharacters.forEach((targetChar, targetIndex) => {
+            if (sourceIndex === targetIndex) return; // Don't draw arrow to self
+
+            // Collect all matching buffs for this source-target pair
+            const matchingBuffs = [];
+
+            sourceChar.buffs.forEach(buff => {
+                if (!buff.affects) return;
+
+                const affectsGrandAlliance = buff.affects.grand_alliance || [];
+                const affectsFaction = buff.affects.faction || [];
+                const affectsTraits = buff.affects.traits || [];
+                const affectsDamageTypes = buff.affects.damage_types || [];
+
                 let matches = false;
                 let isUniversal = false;
-                
+                let specificity = 0; // Higher values = more specific
+
                 // Check for universal buff (*)
                 if (affectsGrandAlliance.includes('*') || affectsFaction.includes('*')) {
                     matches = true;
                     isUniversal = true;
+                    specificity = 0; // Universal is least specific
+                }
+                // Check faction match (most specific)
+                else if (affectsFaction.includes(targetChar.faction)) {
+                    matches = true;
+                    specificity = 3;
                 }
                 // Check grand alliance match
                 else if (affectsGrandAlliance.includes(targetChar.grand_alliance)) {
                     matches = true;
-                }
-                // Check faction match
-                else if (affectsFaction.includes(targetChar.faction)) {
-                    matches = true;
+                    specificity = 2;
                 }
                 // Check trait match - target must have at least one of the traits
                 else if (affectsTraits.length > 0 && targetChar.traits) {
-                    const hasMatchingTrait = affectsTraits.some(trait => 
+                    const hasMatchingTrait = affectsTraits.some(trait =>
                         targetChar.traits.includes(trait)
                     );
                     if (hasMatchingTrait) {
                         matches = true;
+                        specificity = 1;
                     }
                 }
                 // Check damage type match - target must have at least one of the damage types
                 else if (affectsDamageTypes.length > 0 && targetChar.damage_types) {
-                    const hasMatchingDamageType = affectsDamageTypes.some(damageType => 
+                    const hasMatchingDamageType = affectsDamageTypes.some(damageType =>
                         targetChar.damage_types.includes(damageType)
                     );
                     if (hasMatchingDamageType) {
                         matches = true;
+                        specificity = 1;
                     }
                 }
-                
+
                 if (matches) {
-                    const edgeColor = isUniversal ? '#d4af37' : getAllianceColorForGraph(sourceChar.grand_alliance);
-                    const edgeWidth = isUniversal ? 4 : 2;
-                    const isTraitBuff = affectsTraits.length > 0;
-                    
-                    // Build label with omit information
-                    let label = buff.name;
-                    if (buff.omit === 'non-normal') {
-                        label += '\n(normal attacks)';
-                    } else if (buff.omit === 'normal') {
-                        label += '\n(non-normal attacks)';
-                    }
-                    
-                    // Store buff info for the affected character
-                    characterBuffs[targetIndex].push({
-                        buffName: buff.name,
-                        sourceName: sourceChar.name,
-                        effect: buff.effect,
-                        omit: buff.omit
-                    });
-                    
-                    elements.push({
-                        data: {
-                            id: `edge-${sourceIndex}-${targetIndex}-${buff.name}`,
-                            source: `node-${sourceIndex}`,
-                            target: `node-${targetIndex}`,
-                            label: label,
-                            isUniversal: isUniversal,
-                            isTraitBuff: isTraitBuff
-                        },
-                        style: {
-                            'line-color': edgeColor,
-                            'target-arrow-color': edgeColor,
-                            'width': edgeWidth
-                        }
+                    matchingBuffs.push({
+                        buff: buff,
+                        isUniversal: isUniversal,
+                        specificity: specificity,
+                        isTraitBuff: affectsTraits.length > 0
                     });
                 }
             });
+
+            // Group buffs by name and select the most specific version of each
+            const buffsByName = {};
+            matchingBuffs.forEach(buffInfo => {
+                const name = buffInfo.buff.name;
+                if (!buffsByName[name] || buffInfo.specificity > buffsByName[name].specificity) {
+                    buffsByName[name] = buffInfo;
+                }
+            });
+
+            // Create edges and store buff info for the selected buffs
+            Object.values(buffsByName).forEach(buffInfo => {
+                const buff = buffInfo.buff;
+                const edgeColor = buffInfo.isUniversal ? '#d4af37' : getAllianceColorForGraph(sourceChar.grand_alliance);
+                const edgeWidth = buffInfo.isUniversal ? 4 : 2;
+
+                // Build label with omit information
+                let label = buff.name;
+                if (buff.omit === 'non-normal') {
+                    label += '\n(normal attacks)';
+                } else if (buff.omit === 'normal') {
+                    label += '\n(non-normal attacks)';
+                }
+
+                // Store buff info for the affected character
+                characterBuffs[targetIndex].push({
+                    buffName: buff.name,
+                    sourceName: sourceChar.name,
+                    effect: buff.effect,
+                    omit: buff.omit
+                });
+
+                elements.push({
+                    data: {
+                        id: `edge-${sourceIndex}-${targetIndex}-${buff.name}`,
+                        source: `node-${sourceIndex}`,
+                        target: `node-${targetIndex}`,
+                        label: label,
+                        isUniversal: buffInfo.isUniversal,
+                        isTraitBuff: buffInfo.isTraitBuff
+                    },
+                    style: {
+                        'line-color': edgeColor,
+                        'target-arrow-color': edgeColor,
+                        'width': edgeWidth
+                    }
+                });
+            });
         });
     });
-    
+
     // Store globally for overlay rendering
     characterBuffsData = characterBuffs;
-    
+
     // Initialize Cytoscape
     if (cy) {
         cy.destroy();
     }
-    
+
     cy = cytoscape({
         container: document.getElementById('cy'),
         elements: elements,
@@ -614,17 +642,17 @@ function renderSynergyGraph() {
         minZoom: 1,
         maxZoom: 1
     });
-    
+
     // Set fixed zoom level and position graph to the left
     cy.zoom(1);
-    
+
     // Pan to left side of container
     setTimeout(() => {
         const extent = cy.elements().boundingBox();
         cy.pan({ x: -extent.x1 + 50, y: -extent.y1 + 50 });
         updateNodeImageOverlays();
     }, 600);
-    
+
     // Add tooltips on hover
     cy.on('mouseover', 'node', function(event) {
         const node = event.target;
@@ -636,7 +664,7 @@ function renderSynergyGraph() {
         });
         updateNodeImageOverlays();
     });
-    
+
     cy.on('mouseout', 'node', function(event) {
         const node = event.target;
         node.style({
@@ -646,10 +674,10 @@ function renderSynergyGraph() {
         });
         updateNodeImageOverlays();
     });
-    
+
     // Create HTML overlays for images (to avoid CORS issues)
     updateNodeImageOverlays();
-    
+
     // Update overlays when graph is panned or zoomed
     cy.on('pan zoom resize', function() {
         updateNodeImageOverlays();
@@ -659,40 +687,40 @@ function renderSynergyGraph() {
 function updateNodeImageOverlays() {
     const overlayContainer = document.getElementById('node-overlays');
     if (!overlayContainer || !cy) return;
-    
+
     overlayContainer.innerHTML = '';
-    
+
     cy.nodes().forEach(node => {
         const position = node.renderedPosition();
         const width = node.renderedWidth();
         const height = node.renderedHeight();
         const data = node.data();
         const charIndex = data.characterIndex;
-        
+
         // Create wrapper for image and buff table
         const wrapper = document.createElement('div');
         wrapper.style.position = 'absolute';
         wrapper.style.left = `${position.x - width/2}px`;
         wrapper.style.top = `${position.y - height/2}px`;
         wrapper.style.pointerEvents = 'none';
-        
+
         // Create image element
         const imgWrapper = document.createElement('div');
         imgWrapper.style.width = `${width}px`;
         imgWrapper.style.height = `${height}px`;
         imgWrapper.style.borderRadius = '8px';
         imgWrapper.style.overflow = 'hidden';
-        
+
         const img = document.createElement('img');
         img.src = data.portrait;
         img.style.width = '100%';
         img.style.height = '100%';
         img.style.objectFit = 'cover';
         img.style.display = 'block';
-        
+
         imgWrapper.appendChild(img);
         wrapper.appendChild(imgWrapper);
-        
+
         // Add buff table if this character receives buffs
         if (charIndex !== undefined && characterBuffsData[charIndex] && characterBuffsData[charIndex].length > 0) {
             const char = selectedCharacters[charIndex];
@@ -700,7 +728,7 @@ function updateNodeImageOverlays() {
             const hasRange = char.stats && char.stats.range !== undefined;
             const meleeHits = hasMelee ? char.stats.melee : null;
             const rangeHits = hasRange ? char.stats.range : null;
-            
+
             const buffTable = document.createElement('div');
             buffTable.style.marginTop = '8px';
             buffTable.style.background = 'rgba(0, 0, 0, 0.9)';
@@ -711,7 +739,7 @@ function updateNodeImageOverlays() {
             buffTable.style.color = '#d4af37';
             buffTable.style.minWidth = `${width}px`;
             buffTable.style.whiteSpace = 'nowrap';
-            
+
             let tableHTML = '<table style="width: 100%; border-collapse: collapse;">';
             tableHTML += '<tr style="border-bottom: 1px solid #444;">';
             tableHTML += '<th style="text-align: left; padding: 5px; font-size: 13px;">Buff</th>';
@@ -721,7 +749,7 @@ function updateNodeImageOverlays() {
             if (hasRange) {
                 tableHTML += '<th style="text-align: center; padding: 5px; font-size: 13px;">R</th>';
             }
-            tableHTML += '<th style="text-align: right; padding: 5px; font-size: 13px;">Dmg@37</th>';
+            tableHTML += '<th style="text-align: right; padding: 5px; font-size: 13px;">Buff@37</th>';
             if (hasMelee) {
                 tableHTML += '<th style="text-align: right; padding: 5px; font-size: 13px;">Buffed M</th>';
             }
@@ -729,38 +757,38 @@ function updateNodeImageOverlays() {
                 tableHTML += '<th style="text-align: right; padding: 5px; font-size: 13px;">Buffed R</th>';
             }
             tableHTML += '</tr>';
-            
+
             let totalDamage = 0;
             let totalBonus = 0;
             let totalBuffedMelee = 0;
             let totalBuffedRange = 0;
             let totalBuffedBonusMelee = 0;
             let totalBuffedBonusRange = 0;
-            
+
             characterBuffsData[charIndex].forEach(buffInfo => {
                 if (buffInfo.effect && buffInfo.effect.damage) {
                     const damageValue = interpolateBuffValue(buffInfo.effect.damage, BUFF_LEVEL);
                     if (damageValue !== null) {
                         const restriction = buffInfo.effect.restriction; // 'melee', 'ranged', or undefined
                         const isSingleHit = buffInfo.effect.single_hit === true;
-                        
+
                         // Calculate buffed damage based on restriction
                         let buffedMelee = 0;
                         let buffedRange = 0;
-                        
+
                         if (hasMelee && restriction !== 'ranged') {
                             buffedMelee = isSingleHit ? damageValue : meleeHits * damageValue;
                         }
                         if (hasRange && restriction !== 'melee') {
                             buffedRange = isSingleHit ? damageValue : rangeHits * damageValue;
                         }
-                        
+
                         // Only add to totals and render if at least one value is non-zero
                         if (buffedMelee > 0 || buffedRange > 0) {
                             totalDamage += damageValue;
                             totalBuffedMelee += buffedMelee;
                             totalBuffedRange += buffedRange;
-                            
+
                             tableHTML += '<tr>';
                             tableHTML += `<td style="padding: 5px; font-size: 12px;">${buffInfo.buffName}</td>`;
                             if (hasMelee) {
@@ -786,24 +814,24 @@ function updateNodeImageOverlays() {
                     if (bonusValue !== null) {
                         const restriction = buffInfo.effect.restriction; // 'melee', 'ranged', or undefined
                         const isSingleHit = buffInfo.effect.single_hit === true;
-                        
+
                         // Calculate buffed damage based on restriction
                         let buffedMelee = 0;
                         let buffedRange = 0;
-                        
+
                         if (hasMelee && restriction !== 'ranged') {
                             buffedMelee = isSingleHit ? bonusValue : meleeHits * bonusValue;
                         }
                         if (hasRange && restriction !== 'melee') {
                             buffedRange = isSingleHit ? bonusValue : rangeHits * bonusValue;
                         }
-                        
+
                         // Only add to totals and render if at least one value is non-zero
                         if (buffedMelee > 0 || buffedRange > 0) {
                             totalBonus += bonusValue;
                             totalBuffedBonusMelee += buffedMelee;
                             totalBuffedBonusRange += buffedRange;
-                            
+
                             tableHTML += '<tr>';
                             tableHTML += `<td style="padding: 5px; font-size: 12px;">${buffInfo.buffName}+</td>`;
                             if (hasMelee) {
@@ -824,7 +852,7 @@ function updateNodeImageOverlays() {
                     }
                 }
             });
-            
+
             // Add summary row
             if (totalDamage > 0 || totalBonus > 0) {
                 tableHTML += '<tr style="border-top: 2px solid #d4af37;">';
@@ -872,12 +900,12 @@ function updateNodeImageOverlays() {
                 }
                 tableHTML += '</tr>';
             }
-            
+
             tableHTML += '</table>';
             buffTable.innerHTML = tableHTML;
             wrapper.appendChild(buffTable);
         }
-        
+
         overlayContainer.appendChild(wrapper);
     });
 }
