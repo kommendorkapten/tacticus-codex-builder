@@ -3613,6 +3613,44 @@
       }
     ],
     "grand_alliance": "Imperial",
+    "buffs": [
+      {
+        "name": "Rites of Battle",
+        "affects": {
+          "grand_alliance": [
+            "*"
+          ]
+        },
+        "effect": {
+          "damage": {
+              "8": "22",
+              "17": "49",
+              "26": "122",
+              "35": "256",
+              "50": "898",
+              "55": "1072"
+          }
+        }
+      },
+      {
+        "name": "Rites of Battle",
+        "affects": {
+          "faction": [
+            "Imperial"
+          ]
+        },
+        "effect": {
+          "damage": {
+              "8": "32",
+              "17": "71",
+              "26": "175",
+              "35": "371",
+              "50": "1298",
+              "55": "1548"
+          }
+        }
+      }
+    ],
     "row_number": 90
   },
   {
