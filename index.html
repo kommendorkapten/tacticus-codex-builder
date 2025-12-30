@@ -84,6 +84,30 @@
         <div id="error" class="error" style="display: none;">Error loading data. Please check the console.</div>
     </div>
 
-    <script type="module" src="script.js?v=1.0.19"></script>
+    <!-- Unit Buff Details Popup -->
+    <div id="unitPopup" class="unit-popup-overlay" style="display: none;">
+        <div class="unit-popup">
+            <button class="unit-popup-close" id="closePopup">&times;</button>
+            <div class="unit-popup-header">
+                <img id="popupPortrait" class="unit-popup-portrait" src="" alt="">
+                <div class="unit-popup-title">
+                    <h2 id="popupName"></h2>
+                    <p id="popupFaction" class="unit-popup-faction"></p>
+                </div>
+            </div>
+            <div class="unit-popup-content">
+                <div class="unit-popup-section">
+                    <h3>Units That Can Buff This Character <span id="incomingCount" class="unit-popup-count"></span></h3>
+                    <div id="popupIncomingBuffs" class="unit-popup-buffs"></div>
+                </div>
+                <div class="unit-popup-section">
+                    <h3>Units This Character Can Buff <span id="outgoingCount" class="unit-popup-count"></span></h3>
+                    <div id="popupOutgoingBuffs" class="unit-popup-buffs"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script type="module" src="script.js?v=1.0.21"></script>
 </body>
 </html>

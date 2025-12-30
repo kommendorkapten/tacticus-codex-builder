@@ -62,13 +62,17 @@ function renderTable(data) {
             }
         }
 
-        selectBtn.addEventListener('click', () => toggleCharacterSelection(character));
+        selectBtn.addEventListener('click', (e) => {
+            e.stopPropagation();
+            toggleCharacterSelection(character);
+        });
         selectCell.appendChild(selectBtn);
         row.appendChild(selectCell);
 
         const portraitCell = document.createElement('td');
         const portraitAlliance = character.grand_alliance || 'None';
         portraitCell.className = `portrait-cell portrait-${portraitAlliance.toLowerCase().replace(/\s+/g, '-')}`;
+        portraitCell.style.cursor = 'pointer';
         const img = document.createElement('img');
         img.src = character.portrait_url || 'placeholder.png';
         img.alt = character.name || 'Character';
@@ -77,11 +81,14 @@ function renderTable(data) {
             this.src = 'https://placehold.co/60x60?text=No+Image';
         };
         portraitCell.appendChild(img);
+        portraitCell.addEventListener('click', () => showUnitBuffPopup(character));
         row.appendChild(portraitCell);
 
         const nameCell = document.createElement('td');
         nameCell.className = 'name-cell';
+        nameCell.style.cursor = 'pointer';
         nameCell.textContent = character.name || 'Unknown';
+        nameCell.addEventListener('click', () => showUnitBuffPopup(character));
         row.appendChild(nameCell);
 
         const factionCell = document.createElement('td');
@@ -330,6 +337,9 @@ function toggleCharacterSelection(character) {
     updateSelectedSquadDisplay();
     renderTable(filteredData); // Re-render to update button states
 }
+
+// Make toggleCharacterSelection available globally for onclick handlers
+window.toggleCharacterSelection = toggleCharacterSelection;
 
 function removeCharacterFromSquad(characterName) {
     const index = selectedCharacters.findIndex(c => c.name === characterName);
@@ -829,6 +839,348 @@ function setupSquadHandlers() {
         updateSelectedSquadDisplay();
         renderTable(filteredData);
     });
+
+    // Setup popup close handlers
+    setupPopupHandlers();
+}
+
+/**
+ * Setup popup close handlers
+ */
+function setupPopupHandlers() {
+    const popup = document.getElementById('unitPopup');
+    const closeBtn = document.getElementById('closePopup');
+
+    if (closeBtn) {
+        closeBtn.addEventListener('click', () => {
+            popup.style.display = 'none';
+        });
+    }
+
+    if (popup) {
+        popup.addEventListener('click', (e) => {
+            if (e.target === popup) {
+                popup.style.display = 'none';
+            }
+        });
+    }
+
+    // Close popup on Escape key
+    document.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape' && popup && popup.style.display !== 'none') {
+            popup.style.display = 'none';
+        }
+    });
+}
+
+/**
+ * Computes all units that can buff the target character
+ * @param {Object} targetChar - The character to check buffs for
+ * @param {Array} allUnits - All available units
+ * @returns {Array} Array of { sourceChar, buffs: [...], buffData }
+ */
+function computeAllIncomingBuffs(targetChar, allUnits) {
+    const incoming = [];
+
+    allUnits.forEach(sourceChar => {
+        if (sourceChar.name === targetChar.name) return; // Skip self
+        if (!sourceChar.buffs || sourceChar.buffs.length === 0) return;
+
+        const matchingBuffs = [];
+
+        sourceChar.buffs.forEach(buff => {
+            if (!buff.affects) return;
+
+            const affectsGrandAlliance = buff.affects.grand_alliance || [];
+            const affectsFaction = buff.affects.faction || [];
+            const affectsTraits = buff.affects.traits || [];
+            const affectsDamageTypes = buff.affects.damage_types || [];
+
+            let matches = false;
+            let specificity = 0;
+
+            if (affectsGrandAlliance.includes('*') || affectsFaction.includes('*')) {
+                matches = true;
+                specificity = 0;
+            } else if (affectsFaction.includes(targetChar.faction)) {
+                matches = true;
+                specificity = 3;
+            } else if (affectsGrandAlliance.includes(targetChar.grand_alliance)) {
+                matches = true;
+                specificity = 2;
+            } else if (affectsTraits.length > 0 && targetChar.traits) {
+                const hasMatchingTrait = affectsTraits.some(trait => targetChar.traits.includes(trait));
+                if (hasMatchingTrait) {
+                    matches = true;
+                    specificity = 1;
+                }
+            } else if (affectsDamageTypes.length > 0 && targetChar.damage_types) {
+                const hasMatchingDamageType = affectsDamageTypes.some(dt => targetChar.damage_types.includes(dt));
+                if (hasMatchingDamageType) {
+                    matches = true;
+                    specificity = 1;
+                }
+            }
+
+            if (matches) {
+                matchingBuffs.push({
+                    buff: buff,
+                    specificity: specificity
+                });
+            }
+        });
+
+        // Group by name and select most specific
+        const buffsByName = {};
+        matchingBuffs.forEach(buffInfo => {
+            const name = buffInfo.buff.name;
+            if (!buffsByName[name] || buffInfo.specificity > buffsByName[name].specificity) {
+                buffsByName[name] = buffInfo;
+            }
+        });
+
+        const selectedBuffs = Object.values(buffsByName).map(bi => ({
+            buffName: bi.buff.name,
+            sourceName: sourceChar.name,
+            effect: bi.buff.effect,
+            omit: bi.buff.omit
+        }));
+
+        if (selectedBuffs.length > 0) {
+            const buffData = computeBuffDamage(targetChar, selectedBuffs, BUFF_LEVEL);
+            incoming.push({
+                sourceChar: sourceChar,
+                buffs: selectedBuffs,
+                buffData: buffData
+            });
+        }
+    });
+
+    // Sort by cumulative buffed damage (melee + range, highest first)
+    incoming.sort((a, b) => {
+        const aTotals = a.buffData.totals;
+        const bTotals = b.buffData.totals;
+        const aTotal = (aTotals.buffedMelee || 0) + (aTotals.buffedBonusMelee || 0) + 
+                       (aTotals.buffedRange || 0) + (aTotals.buffedBonusRange || 0);
+        const bTotal = (bTotals.buffedMelee || 0) + (bTotals.buffedBonusMelee || 0) + 
+                       (bTotals.buffedRange || 0) + (bTotals.buffedBonusRange || 0);
+        return bTotal - aTotal;
+    });
+
+    return incoming;
+}
+
+/**
+ * Computes all units that the source character can buff
+ * @param {Object} sourceChar - The character providing buffs
+ * @param {Array} allUnits - All available units
+ * @returns {Array} Array of { targetChar, buffs: [...], buffData }
+ */
+function computeAllOutgoingBuffs(sourceChar, allUnits) {
+    const outgoing = [];
+
+    if (!sourceChar.buffs || sourceChar.buffs.length === 0) {
+        return outgoing;
+    }
+
+    allUnits.forEach(targetChar => {
+        if (targetChar.name === sourceChar.name) return; // Skip self
+
+        const matchingBuffs = [];
+
+        sourceChar.buffs.forEach(buff => {
+            if (!buff.affects) return;
+
+            const affectsGrandAlliance = buff.affects.grand_alliance || [];
+            const affectsFaction = buff.affects.faction || [];
+            const affectsTraits = buff.affects.traits || [];
+            const affectsDamageTypes = buff.affects.damage_types || [];
+
+            let matches = false;
+            let specificity = 0;
+
+            if (affectsGrandAlliance.includes('*') || affectsFaction.includes('*')) {
+                matches = true;
+                specificity = 0;
+            } else if (affectsFaction.includes(targetChar.faction)) {
+                matches = true;
+                specificity = 3;
+            } else if (affectsGrandAlliance.includes(targetChar.grand_alliance)) {
+                matches = true;
+                specificity = 2;
+            } else if (affectsTraits.length > 0 && targetChar.traits) {
+                const hasMatchingTrait = affectsTraits.some(trait => targetChar.traits.includes(trait));
+                if (hasMatchingTrait) {
+                    matches = true;
+                    specificity = 1;
+                }
+            } else if (affectsDamageTypes.length > 0 && targetChar.damage_types) {
+                const hasMatchingDamageType = affectsDamageTypes.some(dt => targetChar.damage_types.includes(dt));
+                if (hasMatchingDamageType) {
+                    matches = true;
+                    specificity = 1;
+                }
+            }
+
+            if (matches) {
+                matchingBuffs.push({
+                    buff: buff,
+                    specificity: specificity
+                });
+            }
+        });
+
+        // Group by name and select most specific
+        const buffsByName = {};
+        matchingBuffs.forEach(buffInfo => {
+            const name = buffInfo.buff.name;
+            if (!buffsByName[name] || buffInfo.specificity > buffsByName[name].specificity) {
+                buffsByName[name] = buffInfo;
+            }
+        });
+
+        const selectedBuffs = Object.values(buffsByName).map(bi => ({
+            buffName: bi.buff.name,
+            sourceName: sourceChar.name,
+            effect: bi.buff.effect,
+            omit: bi.buff.omit
+        }));
+
+        if (selectedBuffs.length > 0) {
+            const buffData = computeBuffDamage(targetChar, selectedBuffs, BUFF_LEVEL);
+            outgoing.push({
+                targetChar: targetChar,
+                buffs: selectedBuffs,
+                buffData: buffData
+            });
+        }
+    });
+
+    // Sort by cumulative buffed damage (melee + range, highest first)
+    outgoing.sort((a, b) => {
+        const aTotals = a.buffData.totals;
+        const bTotals = b.buffData.totals;
+        const aTotal = (aTotals.buffedMelee || 0) + (aTotals.buffedBonusMelee || 0) + 
+                       (aTotals.buffedRange || 0) + (aTotals.buffedBonusRange || 0);
+        const bTotal = (bTotals.buffedMelee || 0) + (bTotals.buffedBonusMelee || 0) + 
+                       (bTotals.buffedRange || 0) + (bTotals.buffedBonusRange || 0);
+        return bTotal - aTotal;
+    });
+
+    return outgoing;
+}
+
+/**
+ * Renders a buff card for the popup
+ * @param {Object} otherChar - The other character (source or target)
+ * @param {Array} buffs - The buff info array
+ * @param {Object} buffData - Computed buff damage data
+ * @param {string} direction - 'from' or 'to'
+ * @returns {string} HTML string for the buff card
+ */
+function renderBuffCard(otherChar, buffs, buffData, direction) {
+    const { hasMelee, hasRange, totals } = buffData;
+    const buffNames = buffs.map(b => b.buffName).join(', ');
+    
+    let statsHTML = '';
+    
+    // Show buff value
+    if (totals.damage > 0 || totals.bonus > 0) {
+        statsHTML += `
+            <div class="unit-popup-stat">
+                <span class="unit-popup-stat-label">Buff</span>
+                <span class="unit-popup-stat-value">${totals.damage}${totals.bonus > 0 ? '+' + totals.bonus : ''}</span>
+            </div>
+        `;
+    }
+    
+    // Show melee buffed damage
+    if (hasMelee && (totals.buffedMelee > 0 || totals.buffedBonusMelee > 0)) {
+        const meleeVal = totals.buffedMelee + (totals.buffedBonusMelee || 0);
+        statsHTML += `
+            <div class="unit-popup-stat">
+                <span class="unit-popup-stat-label">Melee</span>
+                <span class="unit-popup-stat-value melee">${meleeVal}</span>
+            </div>
+        `;
+    }
+    
+    // Show range buffed damage
+    if (hasRange && (totals.buffedRange > 0 || totals.buffedBonusRange > 0)) {
+        const rangeVal = totals.buffedRange + (totals.buffedBonusRange || 0);
+        statsHTML += `
+            <div class="unit-popup-stat">
+                <span class="unit-popup-stat-label">Range</span>
+                <span class="unit-popup-stat-value range">${rangeVal}</span>
+            </div>
+        `;
+    }
+
+    return `
+        <div class="unit-popup-buff-card">
+            <div class="unit-popup-buff-header">
+                <img class="unit-popup-buff-portrait" src="${otherChar.portrait_url}" alt="${otherChar.name}">
+                <div class="unit-popup-buff-info">
+                    <div class="unit-popup-buff-name">${otherChar.name}</div>
+                    <div class="unit-popup-buff-details">${buffNames}</div>
+                </div>
+                <div class="unit-popup-buff-stats">
+                    ${statsHTML}
+                </div>
+            </div>
+        </div>
+    `;
+}
+
+/**
+ * Shows the unit buff details popup
+ * @param {Object} character - The character to show buff details for
+ */
+function showUnitBuffPopup(character) {
+    const popup = document.getElementById('unitPopup');
+    const portrait = document.getElementById('popupPortrait');
+    const name = document.getElementById('popupName');
+    const faction = document.getElementById('popupFaction');
+    const incomingContainer = document.getElementById('popupIncomingBuffs');
+    const outgoingContainer = document.getElementById('popupOutgoingBuffs');
+    const incomingCount = document.getElementById('incomingCount');
+    const outgoingCount = document.getElementById('outgoingCount');
+
+    // Set header info
+    portrait.src = character.portrait_url || 'https://placehold.co/80x80?text=No+Image';
+    portrait.alt = character.name;
+    name.textContent = character.name;
+    faction.textContent = `${character.faction} • ${character.grand_alliance || 'Unknown Alliance'}`;
+
+    // Compute incoming buffs from ALL units
+    const incomingBuffs = computeAllIncomingBuffs(character, charactersData);
+    incomingCount.textContent = `(${incomingBuffs.length})`;
+    
+    if (incomingBuffs.length === 0) {
+        incomingContainer.innerHTML = '<p class="unit-popup-no-buffs">No units can buff this character.</p>';
+    } else {
+        let incomingHTML = '';
+        incomingBuffs.forEach(({ sourceChar, buffs, buffData }) => {
+            incomingHTML += renderBuffCard(sourceChar, buffs, buffData, 'from');
+        });
+        incomingContainer.innerHTML = incomingHTML;
+    }
+
+    // Compute outgoing buffs to ALL units
+    const outgoingBuffs = computeAllOutgoingBuffs(character, charactersData);
+    outgoingCount.textContent = `(${outgoingBuffs.length})`;
+    
+    if (outgoingBuffs.length === 0) {
+        outgoingContainer.innerHTML = '<p class="unit-popup-no-buffs">This character cannot buff any other units.</p>';
+    } else {
+        let outgoingHTML = '';
+        outgoingBuffs.forEach(({ targetChar, buffs, buffData }) => {
+            outgoingHTML += renderBuffCard(targetChar, buffs, buffData, 'to');
+        });
+        outgoingContainer.innerHTML = outgoingHTML;
+    }
+
+    popup.style.display = 'flex';
 }
 
 document.addEventListener('DOMContentLoaded', loadCharacters);
