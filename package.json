@@ -1,0 +1,22 @@
+{
+  "name": "tacticus-builder",
+  "version": "1.0.0",
+  "description": "Tacticus Character Database and Squad Builder",
+  "main": "script.js",
+  "type": "module",
+  "scripts": {
+    "test": "NODE_OPTIONS='--no-experimental-webstorage --experimental-vm-modules' jest",
+    "test:watch": "NODE_OPTIONS='--no-experimental-webstorage --experimental-vm-modules' jest --watch",
+    "test:coverage": "NODE_OPTIONS='--no-experimental-webstorage --experimental-vm-modules' jest --coverage"
+  },
+  "keywords": [
+    "warhammer",
+    "tacticus",
+    "squad-builder"
+  ],
+  "author": "",
+  "license": "BSD-3-Clause",
+  "devDependencies": {
+    "jest": "^29.7.0"
+  }
+}

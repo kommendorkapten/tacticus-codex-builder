@@ -1,3 +1,6 @@
+// Import pure functions from shared module
+import { interpolateBuffValue, computeBuffDamage } from './lib/buffCalculations.js';
+
 // Global variables
 let charactersData = [];
 let filteredData = [];
@@ -71,7 +74,7 @@ function renderTable(data) {
         img.alt = character.name || 'Character';
         img.className = 'portrait';
         img.onerror = function() {
-            this.src = 'https://via.placeholder.com/60x60?text=No+Image';
+            this.src = 'https://placehold.co/60x60?text=No+Image';
         };
         portraitCell.appendChild(img);
         row.appendChild(portraitCell);
@@ -368,53 +371,6 @@ function updateSelectedSquadDisplay() {
 let cy = null; // Store Cytoscape instance
 const BUFF_LEVEL = 37; // Hardcoded level for buff calculations
 
-// Function to interpolate buff values at a specific level
-function interpolateBuffValue(damageMap, level) {
-    if (!damageMap || typeof damageMap !== 'object') return null;
-
-    // Convert keys to numbers and sort
-    const levels = Object.keys(damageMap).map(Number).sort((a, b) => a - b);
-
-    // Exact match
-    if (damageMap[level.toString()]) {
-        return parseInt(damageMap[level.toString()]);
-    }
-
-    // Find surrounding levels for interpolation
-    let lowerLevel = null;
-    let upperLevel = null;
-
-    for (let i = 0; i < levels.length; i++) {
-        if (levels[i] < level) {
-            lowerLevel = levels[i];
-        }
-        if (levels[i] > level && upperLevel === null) {
-            upperLevel = levels[i];
-            break;
-        }
-    }
-
-    // If level is below all keys, return lowest value
-    if (lowerLevel === null && upperLevel !== null) {
-        return parseInt(damageMap[upperLevel.toString()]);
-    }
-
-    // If level is above all keys, return highest value
-    if (upperLevel === null && lowerLevel !== null) {
-        return parseInt(damageMap[lowerLevel.toString()]);
-    }
-
-    // Linear interpolation
-    if (lowerLevel !== null && upperLevel !== null) {
-        const lowerValue = parseInt(damageMap[lowerLevel.toString()]);
-        const upperValue = parseInt(damageMap[upperLevel.toString()]);
-        const ratio = (level - lowerLevel) / (upperLevel - lowerLevel);
-        return Math.round(lowerValue + (upperValue - lowerValue) * ratio);
-    }
-
-    return null;
-}
-
 function renderSynergyGraph() {
     const container = document.getElementById('synergyGraph');
 
@@ -625,14 +581,7 @@ function renderSynergyGraph() {
             }
         ],
         layout: {
-            name: 'breadthfirst',
-            directed: true,
-            spacingFactor: 1.3,
-            avoidOverlap: true,
-            nodeDimensionsIncludeLabels: true,
-            animate: true,
-            animationDuration: 500,
-            align: 'UL'
+            name: 'preset' // Use preset initially, we'll run layout explicitly
         },
         userZoomingEnabled: false,
         userPanningEnabled: true,
@@ -646,42 +595,156 @@ function renderSynergyGraph() {
     // Set fixed zoom level and position graph to the left
     cy.zoom(1);
 
-    // Pan to left side of container
-    setTimeout(() => {
+    // Run the layout explicitly so we can handle the stop event properly
+    const layout = cy.layout({
+        name: 'breadthfirst',
+        directed: true,
+        spacingFactor: 1.3,
+        avoidOverlap: true,
+        nodeDimensionsIncludeLabels: true,
+        animate: true,
+        animationDuration: 500,
+        align: 'UL'
+    });
+
+    layout.on('layoutstop', function() {
+        // Update overlays after layout animation completes
         const extent = cy.elements().boundingBox();
         cy.pan({ x: -extent.x1 + 50, y: -extent.y1 + 50 });
         updateNodeImageOverlays();
-    }, 600);
-
-    // Add tooltips on hover
-    cy.on('mouseover', 'node', function(event) {
-        const node = event.target;
-        const data = node.data();
-        node.style({
-            'width': 70,
-            'height': 70,
-            'border-width': 3
-        });
-        updateNodeImageOverlays();
     });
 
-    cy.on('mouseout', 'node', function(event) {
-        const node = event.target;
-        node.style({
-            'width': 50,
-            'height': 50,
-            'border-width': 2
-        });
-        updateNodeImageOverlays();
-    });
-
-    // Create HTML overlays for images (to avoid CORS issues)
-    updateNodeImageOverlays();
+    layout.run();
 
     // Update overlays when graph is panned or zoomed
     cy.on('pan zoom resize', function() {
         updateNodeImageOverlays();
     });
+
+    // Update overlays when nodes are dragged
+    cy.on('drag', 'node', function() {
+        updateNodeImageOverlays();
+    });
+}
+
+/**
+ * Renders the buff table HTML from computed buff damage data.
+ * @param {Object} buffData - The computed buff damage object from computeBuffDamage
+ * @param {number} width - The minimum width for the table
+ * @returns {HTMLElement|null} The buff table element or null if no data
+ */
+function renderBuffTable(buffData, width) {
+    const { hasMelee, hasRange, meleeHits, rangeHits, buffRows, totals } = buffData;
+
+    if (buffRows.length === 0) {
+        return null;
+    }
+
+    const buffTable = document.createElement('div');
+    buffTable.style.marginTop = '8px';
+    buffTable.style.background = 'rgba(0, 0, 0, 0.9)';
+    buffTable.style.border = '1px solid #667eea';
+    buffTable.style.borderRadius = '4px';
+    buffTable.style.padding = '8px';
+    buffTable.style.fontSize = '11px';
+    buffTable.style.color = '#d4af37';
+    buffTable.style.minWidth = `${width}px`;
+    buffTable.style.whiteSpace = 'nowrap';
+
+    let tableHTML = '<table style="width: 100%; border-collapse: collapse;">';
+    tableHTML += '<tr style="border-bottom: 1px solid #444;">';
+    tableHTML += '<th style="text-align: left; padding: 5px; font-size: 13px;">Buff</th>';
+    if (hasMelee) {
+        tableHTML += '<th style="text-align: center; padding: 5px; font-size: 13px;">M</th>';
+    }
+    if (hasRange) {
+        tableHTML += '<th style="text-align: center; padding: 5px; font-size: 13px;">R</th>';
+    }
+    tableHTML += '<th style="text-align: right; padding: 5px; font-size: 13px;">Buff@37</th>';
+    if (hasMelee) {
+        tableHTML += '<th style="text-align: right; padding: 5px; font-size: 13px;">Buffed M</th>';
+    }
+    if (hasRange) {
+        tableHTML += '<th style="text-align: right; padding: 5px; font-size: 13px;">Buffed R</th>';
+    }
+    tableHTML += '</tr>';
+
+    // Render buff rows
+    buffRows.forEach(row => {
+        const valueColor = row.isBonus ? '#6bff6b' : '#ff6b6b';
+        const buffedColor = row.isBonus ? '#8fff8f' : (row.isBonus ? '#8fff8f' : null);
+
+        tableHTML += '<tr>';
+        tableHTML += `<td style="padding: 5px; font-size: 12px;">${row.name}</td>`;
+        if (hasMelee) {
+            tableHTML += `<td style="text-align: center; padding: 5px; font-size: 12px; color: #ffa500;">${meleeHits}</td>`;
+        }
+        if (hasRange) {
+            tableHTML += `<td style="text-align: center; padding: 5px; font-size: 12px; color: #00bfff;">${rangeHits}</td>`;
+        }
+        tableHTML += `<td style="text-align: right; padding: 5px; font-size: 13px; font-weight: bold; color: ${valueColor};">${row.value}</td>`;
+        if (hasMelee) {
+            const meleeColor = row.isBonus ? '#8fff8f' : '#ffb366';
+            tableHTML += `<td style="text-align: right; padding: 5px; font-size: 13px; font-weight: bold; color: ${meleeColor};">${row.buffedMelee}</td>`;
+        }
+        if (hasRange) {
+            const rangeColor = row.isBonus ? '#8fff8f' : '#66d9ff';
+            tableHTML += `<td style="text-align: right; padding: 5px; font-size: 13px; font-weight: bold; color: ${rangeColor};">${row.buffedRange}</td>`;
+        }
+        tableHTML += '</tr>';
+    });
+
+    // Add summary row
+    if (totals.damage > 0 || totals.bonus > 0) {
+        tableHTML += '<tr style="border-top: 2px solid #d4af37;">';
+        tableHTML += '<td style="padding: 5px; font-size: 13px; font-weight: bold; color: #d4af37;">Total</td>';
+        if (hasMelee) {
+            tableHTML += `<td style="text-align: center; padding: 5px; font-size: 12px; color: #ffa500;">${meleeHits}</td>`;
+        }
+        if (hasRange) {
+            tableHTML += `<td style="text-align: center; padding: 5px; font-size: 12px; color: #00bfff;">${rangeHits}</td>`;
+        }
+        tableHTML += '<td style="text-align: right; padding: 5px; font-size: 14px; font-weight: bold; color: #ffd700;">';
+        if (totals.damage > 0 && totals.bonus > 0) {
+            tableHTML += `${totals.damage} + ${totals.bonus}`;
+        } else if (totals.damage > 0) {
+            tableHTML += `${totals.damage}`;
+        } else {
+            tableHTML += `${totals.bonus}`;
+        }
+        tableHTML += '</td>';
+        if (hasMelee) {
+            tableHTML += '<td style="text-align: right; padding: 5px; font-size: 14px; font-weight: bold; color: #ffd700;">';
+            if (totals.buffedMelee > 0 && totals.buffedBonusMelee > 0) {
+                tableHTML += `${totals.buffedMelee} + ${totals.buffedBonusMelee}`;
+            } else if (totals.buffedMelee > 0) {
+                tableHTML += `${totals.buffedMelee}`;
+            } else if (totals.buffedBonusMelee > 0) {
+                tableHTML += `${totals.buffedBonusMelee}`;
+            } else {
+                tableHTML += '0';
+            }
+            tableHTML += '</td>';
+        }
+        if (hasRange) {
+            tableHTML += '<td style="text-align: right; padding: 5px; font-size: 14px; font-weight: bold; color: #ffd700;">';
+            if (totals.buffedRange > 0 && totals.buffedBonusRange > 0) {
+                tableHTML += `${totals.buffedRange} + ${totals.buffedBonusRange}`;
+            } else if (totals.buffedRange > 0) {
+                tableHTML += `${totals.buffedRange}`;
+            } else if (totals.buffedBonusRange > 0) {
+                tableHTML += `${totals.buffedBonusRange}`;
+            } else {
+                tableHTML += '0';
+            }
+            tableHTML += '</td>';
+        }
+        tableHTML += '</tr>';
+    }
+
+    tableHTML += '</table>';
+    buffTable.innerHTML = tableHTML;
+    return buffTable;
 }
 
 function updateNodeImageOverlays() {
@@ -724,186 +787,11 @@ function updateNodeImageOverlays() {
         // Add buff table if this character receives buffs
         if (charIndex !== undefined && characterBuffsData[charIndex] && characterBuffsData[charIndex].length > 0) {
             const char = selectedCharacters[charIndex];
-            const hasMelee = char.stats && char.stats.melee !== undefined;
-            const hasRange = char.stats && char.stats.range !== undefined;
-            const meleeHits = hasMelee ? char.stats.melee : null;
-            const rangeHits = hasRange ? char.stats.range : null;
-
-            const buffTable = document.createElement('div');
-            buffTable.style.marginTop = '8px';
-            buffTable.style.background = 'rgba(0, 0, 0, 0.9)';
-            buffTable.style.border = '1px solid #667eea';
-            buffTable.style.borderRadius = '4px';
-            buffTable.style.padding = '8px';
-            buffTable.style.fontSize = '11px';
-            buffTable.style.color = '#d4af37';
-            buffTable.style.minWidth = `${width}px`;
-            buffTable.style.whiteSpace = 'nowrap';
-
-            let tableHTML = '<table style="width: 100%; border-collapse: collapse;">';
-            tableHTML += '<tr style="border-bottom: 1px solid #444;">';
-            tableHTML += '<th style="text-align: left; padding: 5px; font-size: 13px;">Buff</th>';
-            if (hasMelee) {
-                tableHTML += '<th style="text-align: center; padding: 5px; font-size: 13px;">M</th>';
+            const buffData = computeBuffDamage(char, characterBuffsData[charIndex], BUFF_LEVEL);
+            const buffTable = renderBuffTable(buffData, width);
+            if (buffTable) {
+                wrapper.appendChild(buffTable);
             }
-            if (hasRange) {
-                tableHTML += '<th style="text-align: center; padding: 5px; font-size: 13px;">R</th>';
-            }
-            tableHTML += '<th style="text-align: right; padding: 5px; font-size: 13px;">Buff@37</th>';
-            if (hasMelee) {
-                tableHTML += '<th style="text-align: right; padding: 5px; font-size: 13px;">Buffed M</th>';
-            }
-            if (hasRange) {
-                tableHTML += '<th style="text-align: right; padding: 5px; font-size: 13px;">Buffed R</th>';
-            }
-            tableHTML += '</tr>';
-
-            let totalDamage = 0;
-            let totalBonus = 0;
-            let totalBuffedMelee = 0;
-            let totalBuffedRange = 0;
-            let totalBuffedBonusMelee = 0;
-            let totalBuffedBonusRange = 0;
-
-            characterBuffsData[charIndex].forEach(buffInfo => {
-                if (buffInfo.effect && buffInfo.effect.damage) {
-                    const damageValue = interpolateBuffValue(buffInfo.effect.damage, BUFF_LEVEL);
-                    if (damageValue !== null) {
-                        const restriction = buffInfo.effect.restriction; // 'melee', 'ranged', or undefined
-                        const isSingleHit = buffInfo.effect.single_hit === true;
-
-                        // Calculate buffed damage based on restriction
-                        let buffedMelee = 0;
-                        let buffedRange = 0;
-
-                        if (hasMelee && restriction !== 'ranged') {
-                            buffedMelee = isSingleHit ? damageValue : meleeHits * damageValue;
-                        }
-                        if (hasRange && restriction !== 'melee') {
-                            buffedRange = isSingleHit ? damageValue : rangeHits * damageValue;
-                        }
-
-                        // Only add to totals and render if at least one value is non-zero
-                        if (buffedMelee > 0 || buffedRange > 0) {
-                            totalDamage += damageValue;
-                            totalBuffedMelee += buffedMelee;
-                            totalBuffedRange += buffedRange;
-
-                            tableHTML += '<tr>';
-                            tableHTML += `<td style="padding: 5px; font-size: 12px;">${buffInfo.buffName}</td>`;
-                            if (hasMelee) {
-                                tableHTML += `<td style="text-align: center; padding: 5px; font-size: 12px; color: #ffa500;">${meleeHits}</td>`;
-                            }
-                            if (hasRange) {
-                                tableHTML += `<td style="text-align: center; padding: 5px; font-size: 12px; color: #00bfff;">${rangeHits}</td>`;
-                            }
-                            tableHTML += `<td style="text-align: right; padding: 5px; font-size: 13px; font-weight: bold; color: #ff6b6b;">${damageValue}</td>`;
-                            if (hasMelee) {
-                                tableHTML += `<td style="text-align: right; padding: 5px; font-size: 13px; font-weight: bold; color: #ffb366;">${buffedMelee}</td>`;
-                            }
-                            if (hasRange) {
-                                tableHTML += `<td style="text-align: right; padding: 5px; font-size: 13px; font-weight: bold; color: #66d9ff;">${buffedRange}</td>`;
-                            }
-                            tableHTML += '</tr>';
-                        }
-                    }
-                }
-                // Check for damage_bonus
-                if (buffInfo.effect && buffInfo.effect.damage_bonus) {
-                    const bonusValue = interpolateBuffValue(buffInfo.effect.damage_bonus, BUFF_LEVEL);
-                    if (bonusValue !== null) {
-                        const restriction = buffInfo.effect.restriction; // 'melee', 'ranged', or undefined
-                        const isSingleHit = buffInfo.effect.single_hit === true;
-
-                        // Calculate buffed damage based on restriction
-                        let buffedMelee = 0;
-                        let buffedRange = 0;
-
-                        if (hasMelee && restriction !== 'ranged') {
-                            buffedMelee = isSingleHit ? bonusValue : meleeHits * bonusValue;
-                        }
-                        if (hasRange && restriction !== 'melee') {
-                            buffedRange = isSingleHit ? bonusValue : rangeHits * bonusValue;
-                        }
-
-                        // Only add to totals and render if at least one value is non-zero
-                        if (buffedMelee > 0 || buffedRange > 0) {
-                            totalBonus += bonusValue;
-                            totalBuffedBonusMelee += buffedMelee;
-                            totalBuffedBonusRange += buffedRange;
-
-                            tableHTML += '<tr>';
-                            tableHTML += `<td style="padding: 5px; font-size: 12px;">${buffInfo.buffName}+</td>`;
-                            if (hasMelee) {
-                                tableHTML += `<td style="text-align: center; padding: 5px; font-size: 12px; color: #ffa500;">${meleeHits}</td>`;
-                            }
-                            if (hasRange) {
-                                tableHTML += `<td style="text-align: center; padding: 5px; font-size: 12px; color: #00bfff;">${rangeHits}</td>`;
-                            }
-                            tableHTML += `<td style="text-align: right; padding: 5px; font-size: 13px; font-weight: bold; color: #6bff6b;">${bonusValue}</td>`;
-                            if (hasMelee) {
-                                tableHTML += `<td style="text-align: right; padding: 5px; font-size: 13px; font-weight: bold; color: #8fff8f;">${buffedMelee}</td>`;
-                            }
-                            if (hasRange) {
-                                tableHTML += `<td style="text-align: right; padding: 5px; font-size: 13px; font-weight: bold; color: #8fff8f;">${buffedRange}</td>`;
-                            }
-                            tableHTML += '</tr>';
-                        }
-                    }
-                }
-            });
-
-            // Add summary row
-            if (totalDamage > 0 || totalBonus > 0) {
-                tableHTML += '<tr style="border-top: 2px solid #d4af37;">';
-                tableHTML += '<td style="padding: 5px; font-size: 13px; font-weight: bold; color: #d4af37;">Total</td>';
-                if (hasMelee) {
-                    tableHTML += `<td style="text-align: center; padding: 5px; font-size: 12px; color: #ffa500;">${meleeHits}</td>`;
-                }
-                if (hasRange) {
-                    tableHTML += `<td style="text-align: center; padding: 5px; font-size: 12px; color: #00bfff;">${rangeHits}</td>`;
-                }
-                tableHTML += '<td style="text-align: right; padding: 5px; font-size: 14px; font-weight: bold; color: #ffd700;">';
-                if (totalDamage > 0 && totalBonus > 0) {
-                    tableHTML += `${totalDamage} + ${totalBonus}`;
-                } else if (totalDamage > 0) {
-                    tableHTML += `${totalDamage}`;
-                } else {
-                    tableHTML += `${totalBonus}`;
-                }
-                tableHTML += '</td>';
-                if (hasMelee) {
-                    tableHTML += '<td style="text-align: right; padding: 5px; font-size: 14px; font-weight: bold; color: #ffd700;">';
-                    if (totalBuffedMelee > 0 && totalBuffedBonusMelee > 0) {
-                        tableHTML += `${totalBuffedMelee} + ${totalBuffedBonusMelee}`;
-                    } else if (totalBuffedMelee > 0) {
-                        tableHTML += `${totalBuffedMelee}`;
-                    } else if (totalBuffedBonusMelee > 0) {
-                        tableHTML += `${totalBuffedBonusMelee}`;
-                    } else {
-                        tableHTML += '0';
-                    }
-                    tableHTML += '</td>';
-                }
-                if (hasRange) {
-                    tableHTML += '<td style="text-align: right; padding: 5px; font-size: 14px; font-weight: bold; color: #ffd700;">';
-                    if (totalBuffedRange > 0 && totalBuffedBonusRange > 0) {
-                        tableHTML += `${totalBuffedRange} + ${totalBuffedBonusRange}`;
-                    } else if (totalBuffedRange > 0) {
-                        tableHTML += `${totalBuffedRange}`;
-                    } else if (totalBuffedBonusRange > 0) {
-                        tableHTML += `${totalBuffedBonusRange}`;
-                    } else {
-                        tableHTML += '0';
-                    }
-                    tableHTML += '</td>';
-                }
-                tableHTML += '</tr>';
-            }
-
-            tableHTML += '</table>';
-            buffTable.innerHTML = tableHTML;
-            wrapper.appendChild(buffTable);
         }
 
         overlayContainer.appendChild(wrapper);

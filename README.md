@@ -81,6 +81,45 @@ The website expects character data in the following JSON format:
 }
 ```
 
+## Testing
+
+The project uses [Jest](https://jestjs.io/) for unit testing.
+
+### Setup
+
+Install dependencies (one-time setup):
+
+```bash
+npm install
+```
+
+### Running Tests
+
+```bash
+# Run all tests
+npm test
+
+# Run tests in watch mode (re-runs on file changes)
+npm run test:watch
+
+# Run tests with coverage report
+npm run test:coverage
+```
+
+### Test Structure
+
+```
+builder/
+├── tests/
+│   └── computeBuffDamage.test.js   # Unit tests for buff damage computation
+├── script.testable.js               # Testable exports of pure functions
+└── package.json                     # npm config with test scripts
+```
+
+The `computeBuffDamage` function is tested with real character data
+including Thaddeus Noble, Abaddon the Despoiler, Bellator, Sy-gex, and
+Haarken Worldclaimer.
+
 ## Future Enhancements
 
 As noted in the requirements, this static site is designed to be
